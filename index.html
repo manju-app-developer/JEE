@@ -15,11 +15,11 @@
         <div class="header-controls">
             <label for="yearSelect">Select Year:</label>
             <select id="yearSelect" onchange="loadYearwiseTest()">
+                <option value="jee_2025.json">JEE 2025</option>
+                <option value="jee_2024.json">JEE 2024</option>
                 <option value="jee_2023.json">JEE 2023</option>
-                <option value="jee_2022.json">JEE 2022</option>
-                <option value="jee_2021.json">JEE 2021</option>
             </select>
-            <div id="timer" class="timer">Time Left: 3:00:00</div>
+            <div id="timer" class="timer">⏳ Time Left: 3:00:00</div>
             <button id="toggleDarkMode" onclick="toggleDarkMode()">🌙 Dark Mode</button>
         </div>
     </header>
@@ -28,9 +28,10 @@
     <div class="main-container">
         <!-- Sidebar for Question Navigation -->
         <aside class="sidebar">
-            <h3>Question Navigator</h3>
-            <div class="progress-bar-container">
+            <h3>📌 Question Navigator</h3>
+            <div class="progress-container">
                 <div class="progress-bar" id="progressBar"></div>
+                <span id="progress-text">0% Completed</span>
             </div>
             <div id="question-nav"></div>
         </aside>
@@ -41,7 +42,7 @@
         </main>
 
         <!-- Floating Submit Button -->
-        <button class="submit-btn" onclick="submitTest()">Submit Test</button>
+        <button class="submit-btn" onclick="submitTest()">✅ Submit Test</button>
     </div>
 
     <!-- Custom Alert Box -->
