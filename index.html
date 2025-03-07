@@ -3,13 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JEE Advanced Mock Test</title>
+    <title>JEE Mains Mock Test</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
+
+    <style>
+        /* 🌍 Global Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            text-align: center;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* 🔥 Dark Mode */
+        body.dark-mode {
+            background: #181818;
+            color: white;
+        }
+
+        /* 📌 Header */
+        .header {
+            background: #007bff;
+            color: white;
+            padding: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 🎛️ Header Controls */
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        select, button {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #toggleDarkMode {
+            background: #ffcc00;
+            color: black;
+        }
+
+        #toggleDarkMode:hover {
+            background: #ffaa00;
+        }
+
+        /* ⏳ Timer */
+        .timer {
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            color: black;
+        }
+
+        .warning {
+            background: #dc3545 !important;
+            color: white !important;
+        }
+
+        /* 🏆 Main Container */
+        .main-container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+
+        /* 📌 Sidebar */
+        .sidebar {
+            width: 25%;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .progress-container {
+            width: 100%;
+            background: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 8px;
+            background: #007bff;
+            transition: width 0.3s ease-in-out;
+        }
+
+        .question-nav button {
+            width: 30px;
+            height: 30px;
+            margin: 5px;
+            border: none;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .question-nav button:hover {
+            transform: scale(1.1);
+        }
+
+        /* 🎯 Content */
+        .content {
+            width: 75%;
+            padding: 20px;
+        }
+
+        .question {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.6s ease-in-out forwards;
+        }
+
+        /* 🏆 Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .nav-buttons button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .submit-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* 🚀 Custom Alert */
+        .alert-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
 <body>
 
-    <!-- Header Section -->
+    <!-- Header -->
     <header class="header">
         <h1>JEE Mains Mock Test</h1>
         <div class="header-controls">
@@ -26,7 +216,7 @@
 
     <!-- Main Container -->
     <div class="main-container">
-        <!-- Sidebar for Question Navigation -->
+        <!-- Sidebar -->
         <aside class="sidebar">
             <h3>📌 Question Navigator</h3>
             <div class="progress-container">
@@ -36,7 +226,7 @@
             <div id="question-nav" class="question-nav"></div>
         </aside>
 
-        <!-- Main Content Area -->
+        <!-- Content -->
         <main class="content">
             <div id="question-container">
                 <div id="question-content"></div>
@@ -51,7 +241,7 @@
         <button class="submit-btn" onclick="submitTest()">✅ Submit Test</button>
     </div>
 
-    <!-- Custom Alert Box -->
+    <!-- Custom Alert -->
     <div id="customAlert" class="alert-box">
         <p id="alertMessage"></p>
         <button onclick="closeAlert()">OK</button>
