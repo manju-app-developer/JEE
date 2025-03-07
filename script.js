@@ -60,18 +60,9 @@ function saveAnswer(qid, ans) {
     localStorage.setItem("jeeAnswers", JSON.stringify(answers));
     document.getElementById(`nav${qid}`).classList.add("answered");
     updateProgress();
-    autoScroll(qid);
 }
 
-// Auto Scroll to Next Question
-function autoScroll(qid) {
-    let index = questions.findIndex(q => q.id == qid);
-    if (index < questions.length - 1) {
-        document.getElementById(`question${questions[index + 1].id}`).scrollIntoView({ behavior: "smooth" });
-    }
-}
-
-// Mark for Review with Visual Indicator
+// Mark for Review
 function markForReview(qid) {
     markedForReview[qid] = !markedForReview[qid];
     localStorage.setItem("jeeReview", JSON.stringify(markedForReview));
@@ -98,26 +89,22 @@ function startTimer(seconds) {
     }, 1000);
 }
 
-// Submit Test & Calculate Score
+// Submit Test & Calculate Score Correctly (Out of 75)
 function submitTest() {
-    let score = 0, correct = 0, wrong = 0, unattempted = 0;
+    let correct = 0, wrong = 0, unattempted = 0;
 
     questions.forEach(q => {
         if (answers[q.id] !== undefined) {
             if (q.type === "mcq") {
                 if (parseInt(answers[q.id]) === q.correct) {
-                    score += 4;
                     correct++;
                 } else {
-                    score -= 1;
                     wrong++;
                 }
             } else if (q.type === "numerical") {
                 if (parseFloat(answers[q.id]) === parseFloat(q.correct)) {
-                    score += 4;
                     correct++;
                 } else {
-                    score -= 1;
                     wrong++;
                 }
             }
@@ -126,15 +113,18 @@ function submitTest() {
         }
     });
 
+    let score = (correct * 4) - (wrong * 1); // Max Score = 75
+
     localStorage.setItem("jeeScore", score);
     localStorage.setItem("jeeCorrect", correct);
     localStorage.setItem("jeeWrong", wrong);
     localStorage.setItem("jeeUnattempted", unattempted);
-    
+    localStorage.setItem("jeeReviewAnswers", JSON.stringify(answers)); // Store for review
+
     window.location.href = "result.html";
 }
 
-// Jump to a Question with Smooth Scroll
+// Jump to a Question
 function jumpTo(qid) {
     document.getElementById(`question${qid}`).scrollIntoView({ behavior: "smooth" });
 }
@@ -147,12 +137,12 @@ function updateProgress() {
     document.getElementById("progress-text").innerText = `${progress}% Completed`;
 }
 
-// Toggle Dark Mode with Smooth Transition
+// Toggle Dark Mode
 function toggleDarkMode() {
     document.body.classList.toggle("dark-mode");
 }
 
-// Reset Test Data & Restart Test
+// Reset Test & Restart
 function resetTest() {
     if (confirm("Are you sure you want to reset the test? All answers will be lost!")) {
         localStorage.removeItem("jeeAnswers");
@@ -161,8 +151,38 @@ function resetTest() {
         localStorage.removeItem("jeeWrong");
         localStorage.removeItem("jeeUnattempted");
         localStorage.removeItem("jeeScore");
+        localStorage.removeItem("jeeReviewAnswers");
         location.reload();
     }
 }
 
-document.addEventListener("DOMContentLoaded", loadYearwiseTest);
+// Review Answers Feature (On Result Page)
+function loadReviewAnswers() {
+    let reviewContainer = document.getElementById("review-questions");
+    let storedAnswers = JSON.parse(localStorage.getItem("jeeReviewAnswers")) || {};
+
+    reviewContainer.innerHTML = "";
+
+    questions.forEach((q, index) => {
+        let correctAnswer = q.type === "mcq" ? q.options[q.correct] : q.correct;
+        let userAnswer = storedAnswers[q.id] !== undefined
+            ? (q.type === "mcq" ? q.options[storedAnswers[q.id]] : storedAnswers[q.id])
+            : "Not Answered";
+
+        reviewContainer.innerHTML += `
+            <div class="question">
+                <p><b>Q${index + 1}:</b> ${q.question}</p>
+                <p><b>Your Answer:</b> ${userAnswer}</p>
+                <p><b>Correct Answer:</b> ${correctAnswer}</p>
+                <hr>
+            </div>
+        `;
+    });
+}
+
+// Load review page when review.html is opened
+if (window.location.pathname.includes("review.html")) {
+    loadReviewAnswers();
+} else {
+    document.addEventListener("DOMContentLoaded", loadYearwiseTest);
+}
