@@ -1,4 +1,5 @@
 let questions = [];
+let currentQuestionIndex = 0;
 let answers = JSON.parse(localStorage.getItem("jeeAnswers")) || {};
 let markedForReview = JSON.parse(localStorage.getItem("jeeReview")) || {};
 let totalQuestions = 75;
@@ -13,61 +14,83 @@ function loadYearwiseTest() {
         .then(response => response.json())
         .then(data => {
             questions = [...data.physics, ...data.chemistry, ...data.math];
-            displayQuestions();
+            displayQuestion(0);
             startTimer(timeLeft);
             updateProgress();
         });
 }
 
-// Display Questions
-function displayQuestions() {
+// Display One Question at a Time
+function displayQuestion(index) {
     let questionContainer = document.getElementById("questions");
     let navContainer = document.getElementById("question-nav");
+    let q = questions[index];
 
-    questionContainer.innerHTML = "";
-    navContainer.innerHTML = "";
+    if (!q) return;
 
-    questions.forEach((q, index) => {
-        let imageHTML = q.image ? `<img src="${q.image}" class="question-image" alt="Question Image">` : "";
+    let imageHTML = q.image ? `<img src="${q.image}" class="question-image" alt="Question Image">` : "";
+    
+    let optionsHTML = q.type === "mcq"
+        ? q.options.map((opt, i) => 
+            `<label><input type="radio" name="q${q.id}" value="${i}" ${answers[q.id] == i ? "checked" : ""} 
+            onchange="saveAnswer(${q.id}, ${i})"> ${opt}</label><br>`).join("")
+        : `<input type="number" id="q${q.id}" value="${answers[q.id] || ""}" oninput="saveAnswer(${q.id}, this.value)">`;
 
-        let optionsHTML = q.type === "mcq"
-            ? q.options.map((opt, i) => 
-                `<label><input type="radio" name="q${q.id}" value="${i}" ${answers[q.id] == i ? "checked" : ""} 
-                onchange="saveAnswer(${q.id}, ${i})"> ${opt}</label><br>`).join("")
-            : `<input type="number" id="q${q.id}" value="${answers[q.id] || ""}" oninput="saveAnswer(${q.id}, this.value)">`;
+    questionContainer.innerHTML = `
+        <div class="question" id="question${q.id}">
+            <p><b>Q${index + 1}:</b> ${q.question}</p>
+            ${imageHTML}
+            ${optionsHTML}
+            <button onclick="markForReview(${q.id})" class="${markedForReview[q.id] ? 'review-marked' : ''}">🔍 Mark for Review</button>
+        </div>
+    `;
 
-        questionContainer.innerHTML += `
-            <div class="question" id="question${q.id}">
-                <p><b>Q${index + 1}:</b> ${q.question}</p>
-                ${imageHTML}
-                ${optionsHTML}
-                <button onclick="markForReview(${q.id})" class="${markedForReview[q.id] ? 'review-marked' : ''}">🔍 Mark for Review</button>
-            </div>
-        `;
-
-        let navBtn = document.createElement("button");
-        navBtn.innerText = index + 1;
-        navBtn.id = `nav${q.id}`;
-        navBtn.className = answers[q.id] ? "answered" : "";
-        navBtn.onclick = () => jumpTo(q.id);
-        navContainer.appendChild(navBtn);
-    });
+    updateNavButtons(index);
 }
 
 // Save Answer & Auto-Navigate
 function saveAnswer(qid, ans) {
     answers[qid] = ans;
     localStorage.setItem("jeeAnswers", JSON.stringify(answers));
-    document.getElementById(`nav${qid}`).classList.add("answered");
     updateProgress();
+}
+
+// Smart Navigation Between Questions
+function nextQuestion() {
+    if (currentQuestionIndex < totalQuestions - 1) {
+        currentQuestionIndex++;
+        displayQuestion(currentQuestionIndex);
+    }
+}
+
+function prevQuestion() {
+    if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        displayQuestion(currentQuestionIndex);
+    }
+}
+
+// Smart Question Navigator
+function updateNavButtons(index) {
+    let navContainer = document.getElementById("question-nav");
+    navContainer.innerHTML = "";
+
+    questions.forEach((_, i) => {
+        let navBtn = document.createElement("button");
+        navBtn.innerText = i + 1;
+        navBtn.className = i === index ? "current-question" : "";
+        navBtn.onclick = () => {
+            currentQuestionIndex = i;
+            displayQuestion(i);
+        };
+        navContainer.appendChild(navBtn);
+    });
 }
 
 // Mark for Review
 function markForReview(qid) {
     markedForReview[qid] = !markedForReview[qid];
     localStorage.setItem("jeeReview", JSON.stringify(markedForReview));
-    let btn = document.getElementById(`nav${qid}`);
-    btn.classList.toggle("review-marked", markedForReview[qid]);
 }
 
 // Timer Function with Auto-Submit
@@ -89,7 +112,7 @@ function startTimer(seconds) {
     }, 1000);
 }
 
-// Submit Test & Calculate Score Correctly (Out of 75)
+// Submit Test & Calculate Score Correctly (Out of 300)
 function submitTest() {
     let correct = 0, wrong = 0, unattempted = 0;
 
@@ -113,7 +136,7 @@ function submitTest() {
         }
     });
 
-    let score = (correct * 4) - (wrong * 1); // Max Score = 75
+    let score = (correct * 4) - (wrong * 1); // Max Score = 300
 
     localStorage.setItem("jeeScore", score);
     localStorage.setItem("jeeCorrect", correct);
@@ -122,11 +145,6 @@ function submitTest() {
     localStorage.setItem("jeeReviewAnswers", JSON.stringify(answers)); // Store for review
 
     window.location.href = "result.html";
-}
-
-// Jump to a Question
-function jumpTo(qid) {
-    document.getElementById(`question${qid}`).scrollIntoView({ behavior: "smooth" });
 }
 
 // Update Progress Bar
@@ -145,13 +163,7 @@ function toggleDarkMode() {
 // Reset Test & Restart
 function resetTest() {
     if (confirm("Are you sure you want to reset the test? All answers will be lost!")) {
-        localStorage.removeItem("jeeAnswers");
-        localStorage.removeItem("jeeReview");
-        localStorage.removeItem("jeeCorrect");
-        localStorage.removeItem("jeeWrong");
-        localStorage.removeItem("jeeUnattempted");
-        localStorage.removeItem("jeeScore");
-        localStorage.removeItem("jeeReviewAnswers");
+        localStorage.clear();
         location.reload();
     }
 }
