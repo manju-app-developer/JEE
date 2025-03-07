@@ -6,18 +6,19 @@
     <title>JEE Test Result</title>
     <link rel="stylesheet" href="style.css">
     <script src="result.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
     <!-- Header -->
-    <div class="header">
+    <header class="header">
         <h1>JEE Mock Test Results</h1>
-    </div>
+    </header>
 
-    <!-- Main Content -->
+    <!-- Main Result Container -->
     <div class="result-container">
         <h2>Your Score: <span id="score">0</span> / 75</h2>
-        
+
         <!-- Performance Breakdown -->
         <div class="performance">
             <p>✅ Correct: <span id="correct">0</span></p>
@@ -30,14 +31,19 @@
             <h3>🏆 Estimated Rank: <span id="rank">Calculating...</span></h3>
         </div>
 
+        <!-- Performance Chart -->
+        <div class="chart-container">
+            <canvas id="performanceChart"></canvas>
+        </div>
+
         <!-- Action Buttons -->
         <div class="buttons">
-            <button class="btn retry" onclick="window.location.href='index.html'">Try Again</button>
-            <button class="btn review" onclick="window.location.href='review.html'">Review Answers</button>
+            <button class="btn retry" onclick="window.location.href='index.html'">🔄 Try Again</button>
+            <button class="btn review" onclick="window.location.href='review.html'">📊 Review Answers</button>
         </div>
     </div>
-to 
-    <!-- Confetti Effect (Hidden Initially) -->
+
+    <!-- Confetti Effect -->
     <canvas id="confetti-canvas"></canvas>
 
 </body>
