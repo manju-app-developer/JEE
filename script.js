@@ -5,16 +5,14 @@ let markedForReview = JSON.parse(localStorage.getItem("jeeReview")) || {};
 let totalQuestions = 75;
 let timeLeft = parseInt(localStorage.getItem("jeeTimeLeft")) || 3 * 60 * 60; // 3 hours
 let timer;
+let autoNavigate = true; // Auto-move to next question after answering
 
 // Load Questions Based on Year Selection
 function loadYearwiseTest() {
     let yearFile = document.getElementById("yearSelect").value;
 
     fetch(`data/${yearFile}`)
-        .then(response => {
-            if (!response.ok) throw new Error("Failed to load questions");
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
             if (!data.physics || !data.chemistry || !data.math) {
                 throw new Error("Invalid question format in JSON file.");
@@ -24,9 +22,8 @@ function loadYearwiseTest() {
             totalQuestions = questions.length;
 
             if (totalQuestions > 0) {
-                displayQuestion(0);
                 updateNavButtons();
-                updateProgress();
+                displayQuestion(0);
                 startTimer();
             } else {
                 document.getElementById("question-content").innerHTML = "<p>No questions available for this year.</p>";
@@ -72,7 +69,6 @@ function displayQuestion(index) {
 
     currentQuestionIndex = index;
     highlightNavButton(index);
-    smoothScrollTo("question-content");
 }
 
 // Save Answer & Auto-Navigate
@@ -81,6 +77,10 @@ function saveAnswer(qid, ans) {
     localStorage.setItem("jeeAnswers", JSON.stringify(answers));
     updateProgress();
     updateNavButtons();
+
+    if (autoNavigate && currentQuestionIndex < totalQuestions - 1) {
+        nextQuestion();
+    }
 }
 
 // Navigate Between Questions
@@ -112,13 +112,6 @@ function updateNavButtons() {
     });
 }
 
-// Highlight the Current Question Button
-function highlightNavButton(index) {
-    document.querySelectorAll(".nav-btn").forEach((btn, i) => {
-        btn.classList.toggle("current-question", i === index);
-    });
-}
-
 // Mark for Review
 function markForReview(qid) {
     markedForReview[qid] = !markedForReview[qid];
@@ -126,7 +119,7 @@ function markForReview(qid) {
     updateNavButtons();
 }
 
-// Timer Function with Auto-Submit
+// Timer Function with Warning Popup
 function startTimer() {
     clearInterval(timer);
 
@@ -136,6 +129,10 @@ function startTimer() {
         let secs = String(timeLeft % 60).padStart(2, '0');
         document.getElementById("timer").innerText = `⏳ Time Left: ${hours}:${minutes}:${secs}`;
         document.getElementById("timer").classList.toggle("warning", timeLeft <= 600);
+
+        if (timeLeft === 300) {
+            alert("⚠️ Only 5 minutes remaining! Submit your test soon.");
+        }
     }
 
     updateTimerDisplay();
@@ -176,38 +173,8 @@ function submitTest() {
     localStorage.setItem("jeeCorrect", correct);
     localStorage.setItem("jeeWrong", wrong);
     localStorage.setItem("jeeUnattempted", unattempted);
-    localStorage.setItem("jeeReviewAnswers", JSON.stringify(answers));
 
     window.location.href = "result.html";
-}
-
-// Update Progress Bar
-function updateProgress() {
-    let completed = Object.keys(answers).length;
-    let progress = Math.round((completed / totalQuestions) * 100);
-    document.getElementById("progressBar").style.width = `${progress}%`;
-    document.getElementById("progress-text").innerText = `${progress}% Completed`;
-}
-
-// Toggle Dark Mode and Save Preference
-function toggleDarkMode() {
-    document.body.classList.toggle("dark-mode");
-    localStorage.setItem("darkMode", document.body.classList.contains("dark-mode") ? "enabled" : "disabled");
-}
-
-// Apply Dark Mode on Page Load
-function applyDarkMode() {
-    if (localStorage.getItem("darkMode") === "enabled") {
-        document.body.classList.add("dark-mode");
-    }
-}
-
-// Reset Test & Restart
-function resetTest() {
-    if (confirm("Are you sure you want to reset the test? All answers will be lost!")) {
-        localStorage.clear();
-        location.reload();
-    }
 }
 
 // Initialize App
