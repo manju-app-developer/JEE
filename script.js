@@ -14,16 +14,18 @@ function loadYearwiseTest() {
         .then(response => response.json())
         .then(data => {
             questions = [...data.physics, ...data.chemistry, ...data.math];
+            totalQuestions = questions.length;
             displayQuestion(0);
-            startTimer(timeLeft);
             updateProgress();
-        });
+            startTimer(timeLeft);
+            updateNavButtons();
+        })
+        .catch(error => console.error("Error loading questions:", error));
 }
 
 // Display One Question at a Time
 function displayQuestion(index) {
-    let questionContainer = document.getElementById("questions");
-    let navContainer = document.getElementById("question-nav");
+    let questionContainer = document.getElementById("question-content");
     let q = questions[index];
 
     if (!q) return;
@@ -37,15 +39,18 @@ function displayQuestion(index) {
         : `<input type="number" id="q${q.id}" value="${answers[q.id] || ""}" oninput="saveAnswer(${q.id}, this.value)">`;
 
     questionContainer.innerHTML = `
-        <div class="question" id="question${q.id}">
+        <div class="question">
             <p><b>Q${index + 1}:</b> ${q.question}</p>
             ${imageHTML}
             ${optionsHTML}
-            <button onclick="markForReview(${q.id})" class="${markedForReview[q.id] ? 'review-marked' : ''}">🔍 Mark for Review</button>
+            <button onclick="markForReview(${q.id})" class="${markedForReview[q.id] ? 'review-marked' : ''}">
+                ${markedForReview[q.id] ? "✅ Marked for Review" : "🔍 Mark for Review"}
+            </button>
         </div>
     `;
 
-    updateNavButtons(index);
+    currentQuestionIndex = index;
+    highlightNavButton(index);
 }
 
 // Save Answer & Auto-Navigate
@@ -55,35 +60,39 @@ function saveAnswer(qid, ans) {
     updateProgress();
 }
 
-// Smart Navigation Between Questions
+// Navigate Between Questions
 function nextQuestion() {
     if (currentQuestionIndex < totalQuestions - 1) {
-        currentQuestionIndex++;
-        displayQuestion(currentQuestionIndex);
+        displayQuestion(++currentQuestionIndex);
     }
 }
 
 function prevQuestion() {
     if (currentQuestionIndex > 0) {
-        currentQuestionIndex--;
-        displayQuestion(currentQuestionIndex);
+        displayQuestion(--currentQuestionIndex);
     }
 }
 
-// Smart Question Navigator
-function updateNavButtons(index) {
+// Update Question Navigator
+function updateNavButtons() {
     let navContainer = document.getElementById("question-nav");
     navContainer.innerHTML = "";
 
     questions.forEach((_, i) => {
         let navBtn = document.createElement("button");
         navBtn.innerText = i + 1;
-        navBtn.className = i === index ? "current-question" : "";
-        navBtn.onclick = () => {
-            currentQuestionIndex = i;
-            displayQuestion(i);
-        };
+        navBtn.classList.add("nav-btn");
+        if (answers[i] !== undefined) navBtn.classList.add("answered");
+        if (markedForReview[i]) navBtn.classList.add("review-marked");
+        navBtn.onclick = () => displayQuestion(i);
         navContainer.appendChild(navBtn);
+    });
+}
+
+// Highlight the Current Question Button
+function highlightNavButton(index) {
+    document.querySelectorAll(".nav-btn").forEach((btn, i) => {
+        btn.classList.toggle("current-question", i === index);
     });
 }
 
@@ -91,6 +100,7 @@ function updateNavButtons(index) {
 function markForReview(qid) {
     markedForReview[qid] = !markedForReview[qid];
     localStorage.setItem("jeeReview", JSON.stringify(markedForReview));
+    updateNavButtons();
 }
 
 // Timer Function with Auto-Submit
@@ -112,7 +122,7 @@ function startTimer(seconds) {
     }, 1000);
 }
 
-// Submit Test & Calculate Score Correctly (Out of 300)
+// Submit Test & Calculate Score
 function submitTest() {
     let correct = 0, wrong = 0, unattempted = 0;
 
@@ -151,7 +161,7 @@ function submitTest() {
 function updateProgress() {
     let completed = Object.keys(answers).length;
     let progress = Math.round((completed / totalQuestions) * 100);
-    document.getElementById("progress-bar").style.width = `${progress}%`;
+    document.getElementById("progressBar").style.width = `${progress}%`;
     document.getElementById("progress-text").innerText = `${progress}% Completed`;
 }
 
