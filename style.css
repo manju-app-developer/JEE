@@ -1,10 +1,20 @@
+/* 🌍 Global Styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif;
     background: #f4f4f4;
     margin: 0;
     padding: 0;
+    color: #333;
+    transition: background 0.3s, color 0.3s;
 }
 
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* 🔥 Header */
 .header {
     background: #007bff;
     color: white;
@@ -13,52 +23,215 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .header select, .header #timer {
     font-size: 16px;
-    padding: 5px;
+    padding: 8px;
     border: none;
     border-radius: 5px;
+    cursor: pointer;
 }
 
+.header #darkModeToggle {
+    background: white;
+    color: #007bff;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    font-weight: bold;
+}
+
+.header #darkModeToggle:hover {
+    background: #007bff;
+    color: white;
+}
+
+/* 📌 Layout */
 .main-container {
     display: flex;
     padding: 20px;
+    gap: 20px;
 }
 
+/* 📊 Sidebar Navigation */
 .sidebar {
     width: 20%;
     background: white;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 15px;
+    border-radius: 10px;
     height: 500px;
     overflow-y: auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar button {
     width: 100%;
-    padding: 10px;
-    margin: 2px;
+    padding: 12px;
+    margin: 3px 0;
     border: none;
     cursor: pointer;
+    background: #ddd;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background 0.3s, transform 0.2s;
 }
 
+.sidebar button.answered {
+    background: #28a745;
+    color: white;
+}
+
+.sidebar button.review-marked {
+    background: #ffc107;
+    color: #333;
+}
+
+.sidebar button:hover {
+    background: #007bff;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* 🎯 Progress Bar */
+.progress-container {
+    width: 100%;
+    background: #ddd;
+    border-radius: 5px;
+    margin: 10px 0;
+    overflow: hidden;
+    height: 10px;
+}
+
+.progress-bar {
+    width: 0;
+    height: 100%;
+    background: #28a745;
+    transition: width 0.5s ease-in-out;
+}
+
+/* 📖 Questions Section */
 .content {
     width: 75%;
     padding: 20px;
     background: white;
-    border-radius: 5px;
-    margin-left: 5%;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .question {
-    padding: 10px;
+    padding: 15px;
     border-bottom: 1px solid #ddd;
+    font-size: 16px;
 }
 
 .question img {
     max-width: 100%;
     display: block;
     margin-top: 10px;
+    border-radius: 5px;
+}
+
+/* 📝 Inputs & Buttons */
+input[type="number"], input[type="radio"] {
+    margin: 5px 0;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s, transform 0.2s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+button.marked {
+    background: #ffc107;
+    color: black;
+}
+
+/* ⏳ Timer */
+#timer {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#timer.warning {
+    color: red;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* 🌙 Dark Mode */
+.dark-mode {
+    background: #181818;
+    color: white;
+}
+
+.dark-mode .header {
+    background: #222;
+}
+
+.dark-mode .sidebar {
+    background: #222;
+    color: white;
+}
+
+.dark-mode .content {
+    background: #333;
+    color: white;
+}
+
+.dark-mode .sidebar button {
+    background: #444;
+    color: white;
+}
+
+.dark-mode .sidebar button:hover {
+    background: #007bff;
+}
+
+/* 📱 Responsive Design */
+@media (max-width: 1024px) {
+    .main-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+    }
+
+    .content {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .sidebar button {
+        font-size: 14px;
+    }
+
+    .content {
+        padding: 10px;
+    }
 }
