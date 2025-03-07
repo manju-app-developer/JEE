@@ -2,49 +2,93 @@
     "physics": [
         {
             "id": 1,
-            "question": "A ball is thrown vertically upwards. What will be its velocity at the highest point?",
-            "options": ["Zero", "Maximum", "Same as initial velocity", "Depends on time"],
+            "question": "What is Newton's Second Law of Motion?",
+            "options": ["F = ma", "E = mc^2", "V = IR", "p = mv"],
             "correct": 0,
             "type": "mcq"
         },
         {
             "id": 2,
-            "question": "A capacitor stores energy in the form of?",
-            "options": ["Charge", "Electric Field", "Magnetic Field", "Current"],
-            "correct": 1,
-            "type": "mcq"
-        }
-    ],
-    "chemistry": [
-        {
-            "id": 3,
-            "question": "What is the pH of pure water at 25°C?",
-            "options": ["7", "0", "14", "Depends on temperature"],
+            "question": "What is the SI unit of electric charge?",
+            "options": ["Coulomb", "Joule", "Watt", "Newton"],
             "correct": 0,
             "type": "mcq"
         },
         {
-            "id": 4,
-            "question": "Which gas is evolved when an acid reacts with a metal?",
-            "options": ["Oxygen", "Hydrogen", "Nitrogen", "Carbon Dioxide"],
+            "id": 3,
+            "question": "A car accelerates from 0 to 30 m/s in 10 seconds. What is its acceleration?",
+            "options": ["2 m/s²", "3 m/s²", "4 m/s²", "5 m/s²"],
             "correct": 1,
+            "type": "mcq"
+        },
+        {
+            "id": 4,
+            "question": "Find the work done if a force of 10N moves an object by 5m.",
+            "options": ["50 J", "40 J", "30 J", "20 J"],
+            "correct": 0,
             "type": "mcq"
         }
     ],
-    "math": [
+    
+    "chemistry": [
         {
             "id": 5,
-            "question": "What is the derivative of sin(x)?",
-            "options": ["cos(x)", "-cos(x)", "sin(x)", "-sin(x)"],
+            "question": "What is Avogadro’s number?",
+            "options": ["6.022×10^23", "9.81 m/s^2", "3.00×10^8 m/s", "1.66×10^-27 kg"],
             "correct": 0,
             "type": "mcq"
         },
         {
             "id": 6,
-            "question": "Solve for x: 2x + 5 = 15.",
-            "options": [],
-            "correct": 5,
-            "type": "numerical"
+            "question": "Which gas is known as laughing gas?",
+            "options": ["N₂O", "CO₂", "O₂", "H₂"],
+            "correct": 0,
+            "type": "mcq"
+        },
+        {
+            "id": 7,
+            "question": "What is the pH of pure water at 25°C?",
+            "options": ["7", "6", "8", "5"],
+            "correct": 0,
+            "type": "mcq"
+        },
+        {
+            "id": 8,
+            "question": "Which element is a noble gas?",
+            "options": ["Oxygen", "Nitrogen", "Helium", "Sulfur"],
+            "correct": 2,
+            "type": "mcq"
+        }
+    ],
+    
+    "math": [
+        {
+            "id": 9,
+            "question": "What is the derivative of x²?",
+            "options": ["x", "2x", "x²", "1"],
+            "correct": 1,
+            "type": "mcq"
+        },
+        {
+            "id": 10,
+            "question": "Solve: lim(x→0) sin(x)/x",
+            "options": ["0", "1", "Infinity", "-1"],
+            "correct": 1,
+            "type": "mcq"
+        },
+        {
+            "id": 11,
+            "question": "Find the integral of x² dx.",
+            "options": ["x³/3 + C", "x² + C", "2x + C", "x³/2 + C"],
+            "correct": 0,
+            "type": "mcq"
+        },
+        {
+            "id": 12,
+            "question": "If f(x) = x³, what is f''(x)?",
+            "options": ["3x²", "6x", "x²", "3x"],
+            "correct": 1,
+            "type": "mcq"
         }
     ]
 }
