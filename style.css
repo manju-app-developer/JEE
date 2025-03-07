@@ -5,10 +5,11 @@
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
     transition: all 0.3s ease-in-out;
+    scroll-behavior: smooth;
 }
 
 body {
-    background: #f4f4f4;
+    background: #f0f2f5;
     color: #333;
     display: flex;
     flex-direction: column;
@@ -38,13 +39,14 @@ body {
     top: 0;
     width: 100%;
     z-index: 1000;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
+    backdrop-filter: blur(10px);
 }
 
 .header select, .header #timer {
     font-size: 16px;
-    padding: 8px 12px;
+    padding: 10px 15px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -54,16 +56,16 @@ body {
 .header #darkModeToggle {
     background: white;
     color: #007bff;
-    padding: 8px 12px;
+    padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;
     border: none;
     font-weight: bold;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .header #darkModeToggle:hover {
-    background: #007bff;
+    background: #0056b3;
     color: white;
 }
 
@@ -79,11 +81,11 @@ body {
 .sidebar {
     width: 25%;
     background: rgba(255, 255, 255, 0.9);
-    padding: 15px;
+    padding: 20px;
     border-radius: 10px;
     height: 500px;
     overflow-y: auto;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(10px);
 }
 
@@ -122,7 +124,7 @@ body {
     border-radius: 5px;
     margin: 10px 0;
     overflow: hidden;
-    height: 10px;
+    height: 12px;
 }
 
 .progress-bar {
@@ -138,7 +140,7 @@ body {
     padding: 20px;
     background: rgba(255, 255, 255, 0.95);
     border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(10px);
 }
 
@@ -162,7 +164,7 @@ input[type="number"], input[type="radio"] {
 }
 
 button {
-    padding: 10px 15px;
+    padding: 12px 18px;
     border: none;
     cursor: pointer;
     border-radius: 5px;
@@ -243,14 +245,28 @@ button.marked {
 @media (max-width: 600px) {
     .header {
         flex-direction: column;
-        text-align: center;
+        gap: 10px;
     }
 
-    .sidebar button {
-        font-size: 14px;
+    .main-container {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        padding: 10px;
     }
 
     .content {
-        padding: 10px;
+        width: 100%;
+        padding: 15px;
+    }
+
+    button {
+        width: 100%;
+        padding: 14px;
     }
 }
