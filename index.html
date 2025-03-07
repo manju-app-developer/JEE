@@ -20,7 +20,7 @@
                 <option value="jee_2023.json">JEE 2023</option>
             </select>
             <div id="timer" class="timer">⏳ Time Left: 3:00:00</div>
-            <button id="toggleDarkMode" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+            <button id="toggleDarkMode">🌙 Dark Mode</button>
         </div>
     </header>
 
@@ -33,12 +33,18 @@
                 <div class="progress-bar" id="progressBar"></div>
                 <span id="progress-text">0% Completed</span>
             </div>
-            <div id="question-nav"></div>
+            <div id="question-nav" class="question-nav"></div>
         </aside>
 
         <!-- Main Content Area -->
         <main class="content">
-            <div id="questions"></div>
+            <div id="question-container">
+                <div id="question-content"></div>
+                <div class="nav-buttons">
+                    <button id="prevBtn" onclick="prevQuestion()">⬅ Previous</button>
+                    <button id="nextBtn" onclick="nextQuestion()">Next ➡</button>
+                </div>
+            </div>
         </main>
 
         <!-- Floating Submit Button -->
