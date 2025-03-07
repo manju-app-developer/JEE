@@ -5,17 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JEE Test Result</title>
     <link rel="stylesheet" href="style.css">
+    <script src="result.js" defer></script>
 </head>
 <body>
+
+    <!-- Header -->
     <div class="header">
-        <h1>Your JEE Mock Test Score</h1>
+        <h1>JEE Mock Test Results</h1>
     </div>
-    <div class="content">
-        <h2 id="score"></h2>
-        <button onclick="window.location.href='index.html'">Try Again</button>
+
+    <!-- Main Content -->
+    <div class="result-container">
+        <h2>Your Score: <span id="score">0</span> / 75</h2>
+        
+        <!-- Performance Breakdown -->
+        <div class="performance">
+            <p>✅ Correct: <span id="correct">0</span></p>
+            <p>❌ Wrong: <span id="wrong">0</span></p>
+            <p>⚪ Unattempted: <span id="unattempted">0</span></p>
+        </div>
+
+        <!-- Rank Prediction -->
+        <div class="rank-box">
+            <h3>🏆 Estimated Rank: <span id="rank">Calculating...</span></h3>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="buttons">
+            <button class="btn retry" onclick="window.location.href='index.html'">Try Again</button>
+            <button class="btn review" onclick="window.location.href='review.html'">Review Answers</button>
+        </div>
     </div>
-    <script>
-        document.getElementById("score").innerText = `Your Score: ${localStorage.getItem("jeeScore")} / 75`;
-    </script>
+to 
+    <!-- Confetti Effect (Hidden Initially) -->
+    <canvas id="confetti-canvas"></canvas>
+
 </body>
 </html>
