@@ -1,9 +1,9 @@
 let questions = [];
 let answers = JSON.parse(localStorage.getItem("jeeAnswers")) || {};
 let markedForReview = JSON.parse(localStorage.getItem("jeeReview")) || {};
-let timer;
 let totalQuestions = 75;
 let timeLeft = 3 * 60 * 60; // 3 hours in seconds
+let timer;
 
 // Load Questions Based on Year Selection
 function loadYearwiseTest() {
@@ -104,11 +104,22 @@ function submitTest() {
 
     questions.forEach(q => {
         if (answers[q.id] !== undefined) {
-            if (answers[q.id] == q.correct) {
-                score++;
-                correct++;
-            } else {
-                wrong++;
+            if (q.type === "mcq") {
+                if (parseInt(answers[q.id]) === q.correct) {
+                    score += 4;
+                    correct++;
+                } else {
+                    score -= 1;
+                    wrong++;
+                }
+            } else if (q.type === "numerical") {
+                if (parseFloat(answers[q.id]) === parseFloat(q.correct)) {
+                    score += 4;
+                    correct++;
+                } else {
+                    score -= 1;
+                    wrong++;
+                }
             }
         } else {
             unattempted++;
@@ -139,6 +150,15 @@ function updateProgress() {
 // Dark Mode Toggle
 function toggleDarkMode() {
     document.body.classList.toggle("dark-mode");
+}
+
+// Reset Test Data
+function resetTest() {
+    if (confirm("Are you sure you want to reset the test? All answers will be lost!")) {
+        localStorage.removeItem("jeeAnswers");
+        localStorage.removeItem("jeeReview");
+        location.reload();
+    }
 }
 
 document.addEventListener("DOMContentLoaded", loadYearwiseTest);
