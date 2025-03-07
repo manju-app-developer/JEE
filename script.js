@@ -41,7 +41,7 @@ function displayQuestions() {
                 <p><b>Q${index + 1}:</b> ${q.question}</p>
                 ${imageHTML}
                 ${optionsHTML}
-                <button onclick="markForReview(${q.id})" class="${markedForReview[q.id] ? 'review-marked' : ''}">Mark for Review</button>
+                <button onclick="markForReview(${q.id})" class="${markedForReview[q.id] ? 'review-marked' : ''}">🔍 Mark for Review</button>
             </div>
         `;
 
@@ -71,7 +71,7 @@ function autoScroll(qid) {
     }
 }
 
-// Mark for Review
+// Mark for Review with Visual Indicator
 function markForReview(qid) {
     markedForReview[qid] = !markedForReview[qid];
     localStorage.setItem("jeeReview", JSON.stringify(markedForReview));
@@ -87,7 +87,7 @@ function startTimer(seconds) {
         let minutes = Math.floor((seconds % 3600) / 60);
         let secs = seconds % 60;
 
-        document.getElementById("timer").innerText = `Time Left: ${hours}:${minutes}:${secs}`;
+        document.getElementById("timer").innerText = `⏳ Time Left: ${hours}:${minutes}:${secs}`;
 
         if (seconds <= 600) document.getElementById("timer").classList.add("warning"); // Red alert for last 10 mins
         if (seconds <= 0) {
@@ -134,12 +134,12 @@ function submitTest() {
     window.location.href = "result.html";
 }
 
-// Jump to a Question
+// Jump to a Question with Smooth Scroll
 function jumpTo(qid) {
     document.getElementById(`question${qid}`).scrollIntoView({ behavior: "smooth" });
 }
 
-// Update Progress
+// Update Progress Bar
 function updateProgress() {
     let completed = Object.keys(answers).length;
     let progress = Math.round((completed / totalQuestions) * 100);
@@ -147,16 +147,20 @@ function updateProgress() {
     document.getElementById("progress-text").innerText = `${progress}% Completed`;
 }
 
-// Dark Mode Toggle
+// Toggle Dark Mode with Smooth Transition
 function toggleDarkMode() {
     document.body.classList.toggle("dark-mode");
 }
 
-// Reset Test Data
+// Reset Test Data & Restart Test
 function resetTest() {
     if (confirm("Are you sure you want to reset the test? All answers will be lost!")) {
         localStorage.removeItem("jeeAnswers");
         localStorage.removeItem("jeeReview");
+        localStorage.removeItem("jeeCorrect");
+        localStorage.removeItem("jeeWrong");
+        localStorage.removeItem("jeeUnattempted");
+        localStorage.removeItem("jeeScore");
         location.reload();
     }
 }
