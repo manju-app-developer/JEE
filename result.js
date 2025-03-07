@@ -6,32 +6,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let score = (correctAnswers * 4) - (wrongAnswers * 1); // +4 for correct, -1 for wrong
 
-    // Smooth Score Animation
-    animateCounter("score", score, 1000);
-    animateCounter("correct", correctAnswers, 800);
-    animateCounter("wrong", wrongAnswers, 800);
-    animateCounter("unattempted", unattempted, 800);
+    // 🔥 Animate Score and Performance Stats
+    animateCounter("score", score, 1200);
+    animateCounter("correct", correctAnswers, 1000);
+    animateCounter("wrong", wrongAnswers, 1000);
+    animateCounter("unattempted", unattempted, 1000);
 
-    // Rank Prediction
+    // 🎯 Enhanced Rank Prediction Logic
     let rank;
-    if (score >= 300) rank = "🏆 Top 500";
-    else if (score >= 250) rank = "🥇 Top 2000";
-    else if (score >= 200) rank = "🥈 Top 5000";
-    else if (score >= 150) rank = "🥉 Top 10,000";
-    else if (score >= 100) rank = "🔹 Top 50,000";
-    else rank = "📉 Needs Improvement";
+    if (score >= 300) rank = "🏆 AIR 500 or Better";
+    else if (score >= 250) rank = "🥇 AIR 2000";
+    else if (score >= 200) rank = "🥈 AIR 5000";
+    else if (score >= 150) rank = "🥉 AIR 10,000";
+    else if (score >= 100) rank = "🔹 AIR 50,000";
+    else rank = "📉 Needs More Practice";
 
     document.getElementById("rank").innerText = rank;
 
-    // 🎉 Confetti Animation for High Scores
+    // 🎉 Confetti Animation for High Scores (Celebration)
     if (score >= 250) {
         startConfetti();
     }
 
-    // 📊 Performance Chart
+    // 📊 Render Performance Chart
     renderPerformanceChart(correctAnswers, wrongAnswers, unattempted);
 
-    // Smooth fade-in effect for better UI experience
+    // 🎨 Fade-in Effect for Smooth UI Appearance
     document.querySelector(".result-container").style.opacity = "1";
 });
 
@@ -39,17 +39,15 @@ document.addEventListener("DOMContentLoaded", () => {
 function animateCounter(id, targetValue, duration) {
     let element = document.getElementById(id);
     let startValue = 0;
-    let increment = Math.ceil(targetValue / (duration / 16)); // Adjust based on frame rate
+    let stepTime = Math.abs(Math.floor(duration / targetValue));
 
     let counter = setInterval(() => {
-        startValue += increment;
-        if (startValue > targetValue) startValue = targetValue;
+        startValue++;
         element.innerText = startValue;
-
         if (startValue >= targetValue) {
             clearInterval(counter);
         }
-    }, 16); // Approx. 60 FPS
+    }, stepTime);
 }
 
 // 📊 Render Performance Chart using Chart.js
@@ -100,6 +98,8 @@ function startConfetti() {
 
 // 🔄 Reset Test and Clear Data
 function resetTest() {
-    localStorage.clear();
-    window.location.href = "index.html";
+    if (confirm("Are you sure you want to reset the test? All answers will be lost!")) {
+        localStorage.clear();
+        window.location.href = "index.html";
+    }
 }
