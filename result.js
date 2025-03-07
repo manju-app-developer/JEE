@@ -6,51 +6,55 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let score = (correctAnswers * 4) - (wrongAnswers * 1); // +4 for correct, -1 for wrong
 
-    // 🔥 Animate Score and Performance Stats
+    // 🔥 Smooth Score Animation
     animateCounter("score", score, 1200);
     animateCounter("correct", correctAnswers, 1000);
     animateCounter("wrong", wrongAnswers, 1000);
     animateCounter("unattempted", unattempted, 1000);
 
-    // 🎯 Enhanced Rank Prediction Logic
-    let rank;
-    if (score >= 300) rank = "🏆 AIR 500 or Better";
-    else if (score >= 250) rank = "🥇 AIR 2000";
-    else if (score >= 200) rank = "🥈 AIR 5000";
-    else if (score >= 150) rank = "🥉 AIR 10,000";
-    else if (score >= 100) rank = "🔹 AIR 50,000";
-    else rank = "📉 Needs More Practice";
-
+    // 🎯 Improved Rank Prediction Logic
+    let rank = calculateRank(score);
     document.getElementById("rank").innerText = rank;
 
-    // 🎉 Confetti Animation for High Scores (Celebration)
-    if (score >= 250) {
-        startConfetti();
-    }
+    // 🎉 Confetti Animation for High Scores
+    if (score >= 250) startConfetti();
 
     // 📊 Render Performance Chart
     renderPerformanceChart(correctAnswers, wrongAnswers, unattempted);
 
-    // 🎨 Fade-in Effect for Smooth UI Appearance
-    document.querySelector(".result-container").style.opacity = "1";
+    // 🎨 UI Fade-in Effect
+    document.querySelector(".result-container").classList.add("fade-in");
+
+    // 🔄 Event Listener for Reset Button
+    document.getElementById("resetBtn").addEventListener("click", resetTest);
 });
 
-// 🏆 Smooth Number Counter Animation
+// 🏆 Advanced Rank Calculation
+function calculateRank(score) {
+    if (score >= 320) return "🏆 AIR 100 or Better";
+    if (score >= 280) return "🥇 AIR 500";
+    if (score >= 240) return "🥈 AIR 2000";
+    if (score >= 200) return "🥉 AIR 5000";
+    if (score >= 160) return "🔹 AIR 10,000";
+    if (score >= 120) return "⚡ AIR 50,000";
+    return "📉 Needs More Practice";
+}
+
+// 🏆 Smooth Animated Number Counter
 function animateCounter(id, targetValue, duration) {
     let element = document.getElementById(id);
     let startValue = 0;
-    let stepTime = Math.abs(Math.floor(duration / targetValue));
-
+    let increment = Math.ceil(targetValue / (duration / 20));
+    
     let counter = setInterval(() => {
-        startValue++;
+        startValue += increment;
+        if (startValue > targetValue) startValue = targetValue;
         element.innerText = startValue;
-        if (startValue >= targetValue) {
-            clearInterval(counter);
-        }
-    }, stepTime);
+        if (startValue >= targetValue) clearInterval(counter);
+    }, 20);
 }
 
-// 📊 Render Performance Chart using Chart.js
+// 📊 Render Enhanced Performance Chart
 function renderPerformanceChart(correct, wrong, unattempted) {
     let ctx = document.getElementById("performanceChart").getContext("2d");
     new Chart(ctx, {
@@ -60,39 +64,42 @@ function renderPerformanceChart(correct, wrong, unattempted) {
             datasets: [{
                 data: [correct, wrong, unattempted],
                 backgroundColor: ["#28a745", "#dc3545", "#ffc107"],
-                borderWidth: 2
+                borderWidth: 2,
+                hoverOffset: 10
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
             animation: {
-                animateScale: true
+                animateScale: true,
+                animateRotate: true
             },
             plugins: {
                 legend: {
-                    position: "bottom"
+                    position: "bottom",
+                    labels: {
+                        font: {
+                            size: 14
+                        }
+                    }
                 }
             }
         }
     });
 }
 
-// 🎉 Confetti Effect for High Scores
+// 🎉 Confetti Effect Upgrade
 function startConfetti() {
-    let duration = 3 * 1000; // 3 seconds
+    let duration = 3000; // 3 seconds
     let end = Date.now() + duration;
-
     (function frame() {
         confetti({
-            particleCount: 5,
-            spread: 70,
+            particleCount: 8,
+            spread: 80,
             origin: { y: 0.6 }
         });
-
-        if (Date.now() < end) {
-            requestAnimationFrame(frame);
-        }
+        if (Date.now() < end) requestAnimationFrame(frame);
     })();
 }
 
