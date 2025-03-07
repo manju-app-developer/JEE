@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JEE Test Result</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Your JEE Mock Test Score</h1>
+    </div>
+    <div class="content">
+        <h2 id="score"></h2>
+        <button onclick="window.location.href='index.html'">Try Again</button>
+    </div>
+    <script>
+        document.getElementById("score").innerText = `Your Score: ${localStorage.getItem("jeeScore")} / 75`;
+    </script>
+</body>
+</html>
