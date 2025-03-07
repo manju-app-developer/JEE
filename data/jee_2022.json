@@ -1,0 +1,459 @@
+{
+  "Physics": {
+    "MCQ": [
+      {
+        "id": 1,
+        "question": "A particle moves along the x-axis according to the equation x(t) = 5t² - 3t + 2. What is the acceleration of the particle?",
+        "options": ["5 m/s²", "10 m/s²", "15 m/s²", "20 m/s²"],
+        "correct": 1
+      },
+      {
+        "id": 2,
+        "question": "A 2 kg block slides on a frictionless horizontal surface with a speed of 4 m/s. It collides with a spring and compresses it by 0.5 m. What is the spring constant?",
+        "options": ["32 N/m", "64 N/m", "128 N/m", "256 N/m"],
+        "correct": 2
+      },
+      {
+        "id": 3,
+        "question": "A charged particle enters a uniform magnetic field perpendicular to its velocity. What is the path followed by the particle?",
+        "options": ["Straight line", "Parabola", "Circle", "Ellipse"],
+        "correct": 2
+      },
+      {
+        "id": 4,
+        "question": "The half-life of a radioactive substance is 5 years. What fraction of the substance remains after 15 years?",
+        "options": ["1/2", "1/4", "1/8", "1/16"],
+        "correct": 2
+      },
+      {
+        "id": 5,
+        "question": "Two resistors of 4Ω and 6Ω are connected in parallel. What is the equivalent resistance?",
+        "options": ["2.4Ω", "3.5Ω", "4.5Ω", "5Ω"],
+        "correct": 0
+      },
+      {
+        "id": 6,
+        "question": "A lens has a focal length of -20 cm. What type of lens is it?",
+        "options": ["Convex", "Concave", "Plano-convex", "Plano-concave"],
+        "correct": 1
+      },
+      {
+        "id": 7,
+        "question": "The dimensional formula of Planck's constant is:",
+        "options": ["[ML²T⁻²]", "[ML²T⁻¹]", "[MLT⁻¹]", "[M⁻¹L³T²]"],
+        "correct": 1
+      },
+      {
+        "id": 8,
+        "question": "Which of the following is a scalar quantity?",
+        "options": ["Velocity", "Acceleration", "Force", "Energy"],
+        "correct": 3
+      },
+      {
+        "id": 9,
+        "question": "In an elastic collision, which of the following is conserved?",
+        "options": ["Momentum only", "Kinetic energy only", "Both momentum and kinetic energy", "Neither momentum nor kinetic energy"],
+        "correct": 2
+      },
+      {
+        "id": 10,
+        "question": "The escape velocity from the surface of the Earth is approximately:",
+        "options": ["7 km/s", "9 km/s", "11 km/s", "13 km/s"],
+        "correct": 2
+      },
+      {
+        "id": 11,
+        "question": "A transformer is used to:",
+        "options": ["Convert AC to DC", "Convert DC to AC", "Increase or decrease AC voltage", "Increase or decrease DC voltage"],
+        "correct": 2
+      },
+      {
+        "id": 12,
+        "question": "The SI unit of magnetic flux is:",
+        "options": ["Tesla", "Weber", "Henry", "Farad"],
+        "correct": 1
+      },
+      {
+        "id": 13,
+        "question": "Which law states that the induced EMF in a circuit is equal to the rate of change of magnetic flux through the circuit?",
+        "options": ["Faraday's Law", "Lenz's Law", "Ohm's Law", "Ampere's Law"],
+        "correct": 0
+      },
+      {
+        "id": 14,
+        "question": "The phenomenon of bending of light around the corners of an obstacle is called:",
+        "options": ["Reflection", "Refraction", "Diffraction", "Interference"],
+        "correct": 2
+      },
+      {
+        "id": 15,
+        "question": "In a semiconductor, the energy gap between the valence band and the conduction band is:",
+        "options": ["Zero", "Small", "Large", "Infinite"],
+        "correct": 1
+      },
+      {
+        "id": 16,
+        "question": "The time period of a simple pendulum is proportional to:",
+        "options": ["Length of the pendulum", "Square root of the length", "Mass of the bob", "Square of the length"],
+        "correct": 1
+      },
+      {
+        "id": 17,
+        "question": "Which of the following waves are used in radar systems?",
+        "options": ["Radio waves", "Microwaves", "Infrared waves", "Ultraviolet waves"],
+        "correct": 1
+      },
+      {
+        "id": 18,
+        "question": "The unit of electric field is:",
+        "options": ["Volt", "Newton", "Newton per coulomb", "Coulomb per meter"],
+        "correct": 2
+      },
+      {
+        "id": 19,
+        "question": "The phenomenon of superconductivity occurs at:",
+        "options": ["High temperatures", "Low temperatures", "Room temperatures", "All temperatures"],
+        "correct": 1
+      },
+      {
+        "id": 20,
+        "question": "The force between two parallel conductors carrying current in the same direction is:",
+        "options": ["Attractive", "Repulsive", "Zero", "None of the above"],
+        "correct": 0
+      }
+    ],
+    "Integer": [
+      {
+        "id": 21,
+        "question": "A car accelerates uniformly from rest to a speed of 20 m/s in 10 seconds. What is the acceleration of the car in m/s²?",
+        "answer": 2
+      },
+      {
+        "id": 22,
+        "question": "A capacitor of capacitance 10 µF is charged to a potential difference of 100 V. What is the energy stored in the capacitor in joules?",
+        "answer": 0.05
+      },
+      {
+        "id": 23,
+        "question": "A projectile is launched with an initial velocity of 50 m/s at an angle of 30° with the horizontal. What is the maximum height reached by the projectile in meters?",
+        "answer": 31
+      },
+      {
+        "id": 24,
+        "question": "The half-life of a radioactive isotope is 4 years. How many years will it take for the sample to decay to 1/16th of its initial amount?",
+        "answer": 16
+      },
+      {
+        "id": 25,
+        "question": "An object is dropped from a height of 80 meters. How many seconds does it take to reach the ground? (g = 10 m/s²)",
+        "answer": 4
+      }
+    ]
+  }
+}
+{
+  "Mathematics": {
+    "MCQ": [
+      {
+        "id": 1,
+        "question": "If the sum of the roots of the quadratic equation ax² + bx + c = 0 is equal to the product of the roots, then what is the value of b/c?",
+        "options": ["1", "2", "-1", "0"],
+        "correct": 2
+      },
+      {
+        "id": 2,
+        "question": "The number of solutions of the equation sin(x) = x/2 in the interval [-π, π] is:",
+        "options": ["1", "2", "3", "4"],
+        "correct": 2
+      },
+      {
+        "id": 3,
+        "question": "The sum of the coefficients in the expansion of (x + 2)⁵ is:",
+        "options": ["32", "64", "243", "121"],
+        "correct": 1
+      },
+      {
+        "id": 4,
+        "question": "The function f(x) = x³ - 3x² + 4x - 5 has a local minimum at:",
+        "options": ["x = 1", "x = 2", "x = 3", "x = 4"],
+        "correct": 1
+      },
+      {
+        "id": 5,
+        "question": "The equation x⁴ - 4x³ + 6x² - 4x + 1 = 0 has:",
+        "options": ["Four real roots", "Two real and two complex roots", "One real and three complex roots", "Only one real root"],
+        "correct": 0
+      },
+      {
+        "id": 6,
+        "question": "The integral ∫(e^x + x²) dx is:",
+        "options": ["e^x + x³/3 + C", "e^x + x² + C", "e^x + x³/2 + C", "e^x + 2x + C"],
+        "correct": 0
+      },
+      {
+        "id": 7,
+        "question": "The derivative of x^x with respect to x is:",
+        "options": ["x^x (ln x + 1)", "x^x (ln x - 1)", "x^x (ln x + 2)", "x^x (ln x - 2)"],
+        "correct": 0
+      },
+      {
+        "id": 8,
+        "question": "The number of different ways to arrange the letters of the word 'MISSISSIPPI' is:",
+        "options": ["34650", "42000", "30000", "40000"],
+        "correct": 0
+      },
+      {
+        "id": 9,
+        "question": "The distance between the points (3,4) and (6,8) is:",
+        "options": ["3", "5", "6", "7"],
+        "correct": 1
+      },
+      {
+        "id": 10,
+        "question": "If A and B are two independent events, then P(A ∩ B) is:",
+        "options": ["P(A) + P(B)", "P(A) * P(B)", "P(A) / P(B)", "P(A) - P(B)"],
+        "correct": 1
+      },
+      {
+        "id": 11,
+        "question": "If f(x) = x² + 3x + 5, then f'(x) is:",
+        "options": ["2x + 3", "2x - 3", "x + 3", "x² + 3"],
+        "correct": 0
+      },
+      {
+        "id": 12,
+        "question": "The sum of the first n natural numbers is given by:",
+        "options": ["n(n + 1)/2", "n²", "n(n - 1)/2", "n² + n"],
+        "correct": 0
+      },
+      {
+        "id": 13,
+        "question": "If a matrix A is such that A² = I, then A is called a:",
+        "options": ["Singular matrix", "Orthogonal matrix", "Involutory matrix", "Identity matrix"],
+        "correct": 2
+      },
+      {
+        "id": 14,
+        "question": "The equation of a circle with center (3,4) and radius 5 is:",
+        "options": ["(x - 3)² + (y - 4)² = 25", "(x + 3)² + (y + 4)² = 5", "(x - 3)² + (y - 4)² = 5", "(x + 3)² + (y + 4)² = 25"],
+        "correct": 0
+      },
+      {
+        "id": 15,
+        "question": "The value of lim(x→0) (sin x / x) is:",
+        "options": ["0", "1", "∞", "-1"],
+        "correct": 1
+      },
+      {
+        "id": 16,
+        "question": "The area of a triangle with vertices (0,0), (a,0), and (0,b) is:",
+        "options": ["ab", "ab/2", "2ab", "ab/4"],
+        "correct": 1
+      },
+      {
+        "id": 17,
+        "question": "The roots of x² - 5x + 6 = 0 are:",
+        "options": ["2, 3", "1, 6", "3, 4", "0, 5"],
+        "correct": 0
+      },
+      {
+        "id": 18,
+        "question": "The equation x² + y² - 6x - 8y + 9 = 0 represents a:",
+        "options": ["Line", "Parabola", "Circle", "Ellipse"],
+        "correct": 2
+      },
+      {
+        "id": 19,
+        "question": "The sum of an infinite geometric series with first term 2 and common ratio 1/2 is:",
+        "options": ["2", "3", "4", "5"],
+        "correct": 2
+      },
+      {
+        "id": 20,
+        "question": "The derivative of tan(x) is:",
+        "options": ["sec²(x)", "cos²(x)", "sin²(x)", "-sec²(x)"],
+        "correct": 0
+      }
+    ],
+    "Integer": [
+      {
+        "id": 21,
+        "question": "Find the sum of all natural numbers from 1 to 50.",
+        "answer": 1275
+      },
+      {
+        "id": 22,
+        "question": "If a cone has a radius of 3 cm and height of 4 cm, what is its volume (in cm³)? (π = 3.14)",
+        "answer": 37
+      },
+      {
+        "id": 23,
+        "question": "How many different 4-letter words can be formed from the word 'MATH'?",
+        "answer": 24
+      },
+      {
+        "id": 24,
+        "question": "What is the remainder when 5^100 is divided by 7?",
+        "answer": 5
+      },
+      {
+        "id": 25,
+        "question": "If sin θ = 3/5, find cos θ in simplest fraction form.",
+        "answer": 4/5
+      }
+    ]
+  }
+}
+{
+  "Chemistry": {
+    "MCQ": [
+      {
+        "id": 1,
+        "question": "Which of the following has the highest ionization energy?",
+        "options": ["Na", "Mg", "Al", "Cl"],
+        "correct": 3
+      },
+      {
+        "id": 2,
+        "question": "Which of the following is an example of a strong electrolyte?",
+        "options": ["CH3COOH", "NH3", "NaCl", "C6H12O6"],
+        "correct": 2
+      },
+      {
+        "id": 3,
+        "question": "The shape of the methane (CH4) molecule is:",
+        "options": ["Linear", "Trigonal planar", "Tetrahedral", "Octahedral"],
+        "correct": 2
+      },
+      {
+        "id": 4,
+        "question": "Which gas is used in Haber’s process for ammonia synthesis?",
+        "options": ["Oxygen", "Nitrogen", "Helium", "Neon"],
+        "correct": 1
+      },
+      {
+        "id": 5,
+        "question": "Which of the following is a greenhouse gas?",
+        "options": ["O2", "N2", "CO2", "H2"],
+        "correct": 2
+      },
+      {
+        "id": 6,
+        "question": "Which metal is extracted using the Bayer process?",
+        "options": ["Iron", "Aluminium", "Copper", "Zinc"],
+        "correct": 1
+      },
+      {
+        "id": 7,
+        "question": "What is the IUPAC name of CH3-CH2-OH?",
+        "options": ["Ethanol", "Methanol", "Propanol", "Butanol"],
+        "correct": 0
+      },
+      {
+        "id": 8,
+        "question": "Which of the following acids is present in vinegar?",
+        "options": ["Citric acid", "Acetic acid", "Lactic acid", "Tartaric acid"],
+        "correct": 1
+      },
+      {
+        "id": 9,
+        "question": "The color of Cu²⁺ ion in aqueous solution is:",
+        "options": ["Green", "Blue", "Red", "Yellow"],
+        "correct": 1
+      },
+      {
+        "id": 10,
+        "question": "Which of the following has a face-centered cubic (FCC) structure?",
+        "options": ["Iron", "Aluminium", "Copper", "Both Aluminium and Copper"],
+        "correct": 3
+      },
+      {
+        "id": 11,
+        "question": "Which of the following is an example of a Lewis acid?",
+        "options": ["NH3", "H2O", "BF3", "CH4"],
+        "correct": 2
+      },
+      {
+        "id": 12,
+        "question": "Which of the following elements has the smallest atomic radius?",
+        "options": ["Li", "Be", "B", "C"],
+        "correct": 3
+      },
+      {
+        "id": 13,
+        "question": "What is the oxidation state of Cr in K2Cr2O7?",
+        "options": ["+3", "+4", "+5", "+6"],
+        "correct": 3
+      },
+      {
+        "id": 14,
+        "question": "Which of the following is an example of a colloid?",
+        "options": ["Salt solution", "Milk", "Sugar solution", "Alcohol-water mixture"],
+        "correct": 1
+      },
+      {
+        "id": 15,
+        "question": "What type of bond is present in O2 molecule?",
+        "options": ["Single bond", "Double bond", "Triple bond", "No bond"],
+        "correct": 1
+      },
+      {
+        "id": 16,
+        "question": "Which of the following compounds is aromatic?",
+        "options": ["Cyclohexane", "Cyclohexene", "Benzene", "Butane"],
+        "correct": 2
+      },
+      {
+        "id": 17,
+        "question": "Which gas is liberated when sodium reacts with water?",
+        "options": ["Oxygen", "Hydrogen", "Nitrogen", "Chlorine"],
+        "correct": 1
+      },
+      {
+        "id": 18,
+        "question": "Which of the following has the highest electronegativity?",
+        "options": ["Fluorine", "Chlorine", "Oxygen", "Nitrogen"],
+        "correct": 0
+      },
+      {
+        "id": 19,
+        "question": "The reaction of an acid with a base is known as:",
+        "options": ["Redox reaction", "Neutralization reaction", "Hydrolysis", "Combustion"],
+        "correct": 1
+      },
+      {
+        "id": 20,
+        "question": "Which polymer is used in making non-stick cookware?",
+        "options": ["Polyethylene", "Polystyrene", "Teflon", "Nylon"],
+        "correct": 2
+      }
+    ],
+    "Integer": [
+      {
+        "id": 21,
+        "question": "How many moles of oxygen atoms are present in one mole of H2SO4?",
+        "answer": 4
+      },
+      {
+        "id": 22,
+        "question": "What is the atomic number of Carbon?",
+        "answer": 6
+      },
+      {
+        "id": 23,
+        "question": "How many lone pairs are present in the Lewis structure of H2O?",
+        "answer": 2
+      },
+      {
+        "id": 24,
+        "question": "What is the pH of a neutral solution at 25°C?",
+        "answer": 7
+      },
+      {
+        "id": 25,
+        "question": "What is the oxidation state of oxygen in H2O2?",
+        "answer": -1
+      }
+    ]
+  }
+}
