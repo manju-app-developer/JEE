@@ -9,7 +9,7 @@
 }
 
 body {
-    background: #eef2f5;
+    background: linear-gradient(135deg, #eef2f5, #d6e4f0);
     color: #333;
     display: flex;
     flex-direction: column;
@@ -27,7 +27,7 @@ body {
     padding: 20px;
 }
 
-/* 🔥 Header (Glassmorphism Effect) */
+/* 🔥 Header (Modern Glassmorphism) */
 .header {
     background: rgba(0, 123, 255, 0.8);
     color: white;
@@ -45,7 +45,8 @@ body {
     backdrop-filter: blur(12px);
 }
 
-.header select, .header #timer {
+.header select,
+.header #timer {
     font-size: 16px;
     padding: 10px 15px;
     border: none;
@@ -78,7 +79,7 @@ body {
     justify-content: center;
 }
 
-/* 📊 Sidebar Navigation */
+/* 📊 Sidebar (Enhanced Glass UI) */
 .sidebar {
     width: 25%;
     background: rgba(255, 255, 255, 0.85);
@@ -90,53 +91,7 @@ body {
     backdrop-filter: blur(15px);
 }
 
-.sidebar button {
-    width: 100%;
-    padding: 14px;
-    margin: 6px 0;
-    border: none;
-    cursor: pointer;
-    background: #ddd;
-    border-radius: 6px;
-    font-weight: bold;
-    transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
-}
-
-.sidebar button.answered {
-    background: #28a745;
-    color: white;
-}
-
-.sidebar button.review-marked {
-    background: #ffc107;
-    color: #333;
-}
-
-.sidebar button:hover {
-    background: #007bff;
-    color: white;
-    transform: scale(1.05);
-    box-shadow: 0 3px 10px rgba(0, 123, 255, 0.4);
-}
-
-/* 🎯 Progress Bar */
-.progress-container {
-    width: 100%;
-    background: #ddd;
-    border-radius: 6px;
-    margin: 12px 0;
-    overflow: hidden;
-    height: 14px;
-}
-
-.progress-bar {
-    width: 0;
-    height: 100%;
-    background: linear-gradient(135deg, #28a745, #218838);
-    transition: width 0.5s ease-in-out;
-}
-
-/* 📖 Questions Section */
+/* 📖 Questions Section (Fixing Display Error) */
 .content {
     width: 70%;
     padding: 20px;
@@ -144,12 +99,19 @@ body {
     border-radius: 12px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(12px);
+    position: relative;
 }
 
+/* ✅ Fixed Question Display */
 .question {
     padding: 15px;
     border-bottom: 1px solid #ddd;
-    font-size: 16px;
+    font-size: 18px;
+    line-height: 1.6;
+    text-align: justify;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .question img {
@@ -161,7 +123,8 @@ body {
 }
 
 /* 📝 Inputs & Buttons */
-input[type="number"], input[type="radio"] {
+input[type="number"],
+input[type="radio"] {
     margin: 6px 0;
 }
 
@@ -181,6 +144,23 @@ button:hover {
 button.marked {
     background: #ffc107;
     color: black;
+}
+
+/* 🎯 Progress Bar */
+.progress-container {
+    width: 100%;
+    background: #ddd;
+    border-radius: 6px;
+    margin: 12px 0;
+    overflow: hidden;
+    height: 14px;
+}
+
+.progress-bar {
+    width: 0;
+    height: 100%;
+    background: linear-gradient(135deg, #28a745, #218838);
+    transition: width 0.5s ease-in-out;
 }
 
 /* ⏳ Timer */
