@@ -3,34 +3,31 @@ let currentQuestionIndex = 0;
 let answers = JSON.parse(localStorage.getItem("jeeAnswers")) || {};
 let markedForReview = JSON.parse(localStorage.getItem("jeeReview")) || {};
 let totalQuestions = 75;
-let timeLeft = 3 * 60 * 60; // 3 hours in seconds
+let timeLeft = parseInt(localStorage.getItem("jeeTimeLeft")) || 3 * 60 * 60; // 3 hours
 let timer;
 
-// 📌 Load Questions Based on Year Selection
+// Load Questions Based on Year Selection
 function loadYearwiseTest() {
     let yearFile = document.getElementById("yearSelect").value;
-
+    
     fetch(`data/${yearFile}`)
-        .then(response => {
-            if (!response.ok) throw new Error(`Failed to load: ${yearFile}`);
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            questions = [...(data.physics || []), ...(data.chemistry || []), ...(data.math || [])];
+            questions = [...data.physics, ...data.chemistry, ...data.math];
             totalQuestions = questions.length;
-            if (totalQuestions === 0) throw new Error("No questions found!");
-            displayQuestion(0);
-            updateProgress();
-            startTimer(timeLeft);
-            updateNavButtons();
+            if (questions.length > 0) {
+                displayQuestion(0);
+                updateProgress();
+                startTimer();
+                updateNavButtons();
+            } else {
+                console.error("No questions found in the selected file.");
+            }
         })
-        .catch(error => {
-            console.error("Error loading questions:", error);
-            document.getElementById("question-content").innerHTML = `<p class="error">⚠️ Error loading questions: ${error.message}</p>`;
-        });
+        .catch(error => console.error("Error loading questions:", error));
 }
 
-// 📌 Display a Question
+// Display One Question at a Time
 function displayQuestion(index) {
     let questionContainer = document.getElementById("question-content");
     let q = questions[index];
@@ -43,8 +40,7 @@ function displayQuestion(index) {
         ? q.options.map((opt, i) => 
             `<label><input type="radio" name="q${q.id}" value="${i}" ${answers[q.id] == i ? "checked" : ""} 
             onchange="saveAnswer(${q.id}, ${i})"> ${opt}</label><br>`).join("")
-        : `<input type="number" id="q${q.id}" value="${answers[q.id] || ""}" 
-            oninput="saveAnswer(${q.id}, this.value)">`;
+        : `<input type="number" id="q${q.id}" value="${answers[q.id] || ""}" oninput="saveAnswer(${q.id}, this.value)">`;
 
     questionContainer.innerHTML = `
         <div class="question">
@@ -61,14 +57,14 @@ function displayQuestion(index) {
     highlightNavButton(index);
 }
 
-// 📌 Save Answer
+// Save Answer & Auto-Navigate
 function saveAnswer(qid, ans) {
     answers[qid] = ans;
     localStorage.setItem("jeeAnswers", JSON.stringify(answers));
     updateProgress();
 }
 
-// 📌 Navigation Functions
+// Navigate Between Questions
 function nextQuestion() {
     if (currentQuestionIndex < totalQuestions - 1) {
         displayQuestion(++currentQuestionIndex);
@@ -81,7 +77,7 @@ function prevQuestion() {
     }
 }
 
-// 📌 Update Question Navigator
+// Update Question Navigator
 function updateNavButtons() {
     let navContainer = document.getElementById("question-nav");
     navContainer.innerHTML = "";
@@ -97,40 +93,45 @@ function updateNavButtons() {
     });
 }
 
-// 📌 Highlight Current Question Button
+// Highlight the Current Question Button
 function highlightNavButton(index) {
     document.querySelectorAll(".nav-btn").forEach((btn, i) => {
         btn.classList.toggle("current-question", i === index);
     });
 }
 
-// 📌 Mark Question for Review
+// Mark for Review
 function markForReview(qid) {
     markedForReview[qid] = !markedForReview[qid];
     localStorage.setItem("jeeReview", JSON.stringify(markedForReview));
     updateNavButtons();
 }
 
-// 📌 Start Timer with Auto-Submit
-function startTimer(seconds) {
+// Timer Function with Auto-Submit
+function startTimer() {
     clearInterval(timer);
+
     timer = setInterval(() => {
-        let hours = Math.floor(seconds / 3600);
-        let minutes = Math.floor((seconds % 3600) / 60);
-        let secs = seconds % 60;
-
-        document.getElementById("timer").innerText = `⏳ Time Left: ${hours}:${minutes}:${secs}`;
-
-        if (seconds <= 600) document.getElementById("timer").classList.add("warning"); // Red alert for last 10 mins
-        if (seconds <= 0) {
+        if (timeLeft <= 0) {
             clearInterval(timer);
             submitTest();
+            return;
         }
-        seconds--;
+
+        let hours = Math.floor(timeLeft / 3600);
+        let minutes = Math.floor((timeLeft % 3600) / 60);
+        let secs = timeLeft % 60;
+
+        document.getElementById("timer").innerText = `⏳ Time Left: ${hours}:${minutes}:${secs}`;
+        localStorage.setItem("jeeTimeLeft", timeLeft);
+
+        if (timeLeft <= 600) document.getElementById("timer").classList.add("warning"); // Red alert for last 10 mins
+
+        timeLeft--;
     }, 1000);
 }
 
-// 📌 Submit Test & Calculate Score
+// Submit Test & Calculate Score
 function submitTest() {
     let correct = 0, wrong = 0, unattempted = 0;
 
@@ -165,7 +166,7 @@ function submitTest() {
     window.location.href = "result.html";
 }
 
-// 📌 Update Progress Bar
+// Update Progress Bar
 function updateProgress() {
     let completed = Object.keys(answers).length;
     let progress = Math.round((completed / totalQuestions) * 100);
@@ -173,12 +174,20 @@ function updateProgress() {
     document.getElementById("progress-text").innerText = `${progress}% Completed`;
 }
 
-// 📌 Toggle Dark Mode
+// Toggle Dark Mode and Save Preference
 function toggleDarkMode() {
     document.body.classList.toggle("dark-mode");
+    localStorage.setItem("darkMode", document.body.classList.contains("dark-mode") ? "enabled" : "disabled");
 }
 
-// 📌 Reset Test
+// Apply Dark Mode on Page Load
+function applyDarkMode() {
+    if (localStorage.getItem("darkMode") === "enabled") {
+        document.body.classList.add("dark-mode");
+    }
+}
+
+// Reset Test & Restart
 function resetTest() {
     if (confirm("Are you sure you want to reset the test? All answers will be lost!")) {
         localStorage.clear();
@@ -186,33 +195,28 @@ function resetTest() {
     }
 }
 
-// 📌 Review Answers (On Result Page)
+// Review Answers Feature (On Result Page)
 function loadReviewAnswers() {
     let reviewContainer = document.getElementById("review-questions");
     let storedAnswers = JSON.parse(localStorage.getItem("jeeReviewAnswers")) || {};
 
-    reviewContainer.innerHTML = "";
-
-    questions.forEach((q, index) => {
+    reviewContainer.innerHTML = questions.map((q, index) => {
         let correctAnswer = q.type === "mcq" ? q.options[q.correct] : q.correct;
         let userAnswer = storedAnswers[q.id] !== undefined
             ? (q.type === "mcq" ? q.options[storedAnswers[q.id]] : storedAnswers[q.id])
             : "Not Answered";
 
-        reviewContainer.innerHTML += `
-            <div class="question">
-                <p><b>Q${index + 1}:</b> ${q.question}</p>
-                <p><b>Your Answer:</b> ${userAnswer}</p>
-                <p><b>Correct Answer:</b> ${correctAnswer}</p>
-                <hr>
-            </div>
-        `;
-    });
+        return `<div class="question">
+                    <p><b>Q${index + 1}:</b> ${q.question}</p>
+                    <p><b>Your Answer:</b> ${userAnswer}</p>
+                    <p><b>Correct Answer:</b> ${correctAnswer}</p>
+                    <hr>
+                </div>`;
+    }).join("");
 }
 
-// 📌 Load Review Page
-if (window.location.pathname.includes("review.html")) {
-    loadReviewAnswers();
-} else {
-    document.addEventListener("DOMContentLoaded", loadYearwiseTest);
-    }
+// Initialize App
+document.addEventListener("DOMContentLoaded", () => {
+    applyDarkMode();
+    loadYearwiseTest();
+});
