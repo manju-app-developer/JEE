@@ -1,0 +1,50 @@
+{
+    "physics": [
+        {
+            "id": 1,
+            "question": "A ball is thrown vertically upwards. What will be its velocity at the highest point?",
+            "options": ["Zero", "Maximum", "Same as initial velocity", "Depends on time"],
+            "correct": 0,
+            "type": "mcq"
+        },
+        {
+            "id": 2,
+            "question": "A capacitor stores energy in the form of?",
+            "options": ["Charge", "Electric Field", "Magnetic Field", "Current"],
+            "correct": 1,
+            "type": "mcq"
+        }
+    ],
+    "chemistry": [
+        {
+            "id": 3,
+            "question": "What is the pH of pure water at 25°C?",
+            "options": ["7", "0", "14", "Depends on temperature"],
+            "correct": 0,
+            "type": "mcq"
+        },
+        {
+            "id": 4,
+            "question": "Which gas is evolved when an acid reacts with a metal?",
+            "options": ["Oxygen", "Hydrogen", "Nitrogen", "Carbon Dioxide"],
+            "correct": 1,
+            "type": "mcq"
+        }
+    ],
+    "math": [
+        {
+            "id": 5,
+            "question": "What is the derivative of sin(x)?",
+            "options": ["cos(x)", "-cos(x)", "sin(x)", "-sin(x)"],
+            "correct": 0,
+            "type": "mcq"
+        },
+        {
+            "id": 6,
+            "question": "Solve for x: 2x + 5 = 15.",
+            "options": [],
+            "correct": 5,
+            "type": "numerical"
+        }
+    ]
+}
