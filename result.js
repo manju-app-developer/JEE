@@ -7,10 +7,10 @@ document.addEventListener("DOMContentLoaded", () => {
     let score = (correctAnswers * 4) - (wrongAnswers * 1); // +4 for correct, -1 for wrong
 
     // Smooth Score Animation
-    animateCounter("score", score);
-    animateCounter("correct", correctAnswers);
-    animateCounter("wrong", wrongAnswers);
-    animateCounter("unattempted", unattempted);
+    animateCounter("score", score, 1000);
+    animateCounter("correct", correctAnswers, 800);
+    animateCounter("wrong", wrongAnswers, 800);
+    animateCounter("unattempted", unattempted, 800);
 
     // Rank Prediction
     let rank;
@@ -28,24 +28,28 @@ document.addEventListener("DOMContentLoaded", () => {
         startConfetti();
     }
 
-    // 🏆 Performance Chart
+    // 📊 Performance Chart
     renderPerformanceChart(correctAnswers, wrongAnswers, unattempted);
+
+    // Smooth fade-in effect for better UI experience
+    document.querySelector(".result-container").style.opacity = "1";
 });
 
 // 🏆 Smooth Number Counter Animation
-function animateCounter(id, targetValue) {
+function animateCounter(id, targetValue, duration) {
     let element = document.getElementById(id);
     let startValue = 0;
-    let duration = 1000; // 1 second
-    let stepTime = Math.abs(Math.floor(duration / targetValue));
+    let increment = Math.ceil(targetValue / (duration / 16)); // Adjust based on frame rate
 
     let counter = setInterval(() => {
-        startValue++;
+        startValue += increment;
+        if (startValue > targetValue) startValue = targetValue;
         element.innerText = startValue;
+
         if (startValue >= targetValue) {
             clearInterval(counter);
         }
-    }, stepTime);
+    }, 16); // Approx. 60 FPS
 }
 
 // 📊 Render Performance Chart using Chart.js
@@ -63,12 +67,20 @@ function renderPerformanceChart(correct, wrong, unattempted) {
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false
+            maintainAspectRatio: false,
+            animation: {
+                animateScale: true
+            },
+            plugins: {
+                legend: {
+                    position: "bottom"
+                }
+            }
         }
     });
 }
 
-// 🎉 Confetti Effect
+// 🎉 Confetti Effect for High Scores
 function startConfetti() {
     let duration = 3 * 1000; // 3 seconds
     let end = Date.now() + duration;
@@ -84,4 +96,10 @@ function startConfetti() {
             requestAnimationFrame(frame);
         }
     })();
+}
+
+// 🔄 Reset Test and Clear Data
+function resetTest() {
+    localStorage.clear();
+    window.location.href = "index.html";
 }
