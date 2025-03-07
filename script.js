@@ -1,18 +1,21 @@
 let questions = [];
-let answers = {};
-let markedForReview = {};
+let answers = JSON.parse(localStorage.getItem("jeeAnswers")) || {};
+let markedForReview = JSON.parse(localStorage.getItem("jeeReview")) || {};
 let timer;
+let totalQuestions = 75;
+let timeLeft = 3 * 60 * 60; // 3 hours in seconds
 
 // Load Questions Based on Year Selection
 function loadYearwiseTest() {
     let yearFile = document.getElementById("yearSelect").value;
-    
+
     fetch(`data/${yearFile}`)
         .then(response => response.json())
         .then(data => {
             questions = [...data.physics, ...data.chemistry, ...data.math];
             displayQuestions();
-            startTimer(3 * 60 * 60);
+            startTimer(timeLeft);
+            updateProgress();
         });
 }
 
@@ -26,37 +29,57 @@ function displayQuestions() {
 
     questions.forEach((q, index) => {
         let imageHTML = q.image ? `<img src="${q.image}" class="question-image" alt="Question Image">` : "";
-        
+
         let optionsHTML = q.type === "mcq"
-            ? q.options.map((opt, i) => `<label><input type="radio" name="q${q.id}" value="${i}" onchange="saveAnswer(${q.id}, ${i})"> ${opt}</label><br>`).join("")
-            : `<input type="number" id="q${q.id}" oninput="saveAnswer(${q.id}, this.value)">`;
+            ? q.options.map((opt, i) => 
+                `<label><input type="radio" name="q${q.id}" value="${i}" ${answers[q.id] == i ? "checked" : ""} 
+                onchange="saveAnswer(${q.id}, ${i})"> ${opt}</label><br>`).join("")
+            : `<input type="number" id="q${q.id}" value="${answers[q.id] || ""}" oninput="saveAnswer(${q.id}, this.value)">`;
 
         questionContainer.innerHTML += `
             <div class="question" id="question${q.id}">
                 <p><b>Q${index + 1}:</b> ${q.question}</p>
                 ${imageHTML}
                 ${optionsHTML}
-                <button onclick="markForReview(${q.id})">Mark for Review</button>
+                <button onclick="markForReview(${q.id})" class="${markedForReview[q.id] ? 'review-marked' : ''}">Mark for Review</button>
             </div>
         `;
 
-        navContainer.innerHTML += `<button onclick="jumpTo(${q.id})" id="nav${q.id}">${index + 1}</button>`;
+        let navBtn = document.createElement("button");
+        navBtn.innerText = index + 1;
+        navBtn.id = `nav${q.id}`;
+        navBtn.className = answers[q.id] ? "answered" : "";
+        navBtn.onclick = () => jumpTo(q.id);
+        navContainer.appendChild(navBtn);
     });
 }
 
-// Save Answers
+// Save Answer & Auto-Navigate
 function saveAnswer(qid, ans) {
     answers[qid] = ans;
-    document.getElementById(`nav${qid}`).style.background = "#28a745";
+    localStorage.setItem("jeeAnswers", JSON.stringify(answers));
+    document.getElementById(`nav${qid}`).classList.add("answered");
+    updateProgress();
+    autoScroll(qid);
+}
+
+// Auto Scroll to Next Question
+function autoScroll(qid) {
+    let index = questions.findIndex(q => q.id == qid);
+    if (index < questions.length - 1) {
+        document.getElementById(`question${questions[index + 1].id}`).scrollIntoView({ behavior: "smooth" });
+    }
 }
 
 // Mark for Review
 function markForReview(qid) {
-    markedForReview[qid] = !markedForReview[qid]; 
-    document.getElementById(`nav${qid}`).style.background = markedForReview[qid] ? "#ffc107" : "";
+    markedForReview[qid] = !markedForReview[qid];
+    localStorage.setItem("jeeReview", JSON.stringify(markedForReview));
+    let btn = document.getElementById(`nav${qid}`);
+    btn.classList.toggle("review-marked", markedForReview[qid]);
 }
 
-// Timer Function
+// Timer Function with Auto-Submit
 function startTimer(seconds) {
     clearInterval(timer);
     timer = setInterval(() => {
@@ -65,6 +88,8 @@ function startTimer(seconds) {
         let secs = seconds % 60;
 
         document.getElementById("timer").innerText = `Time Left: ${hours}:${minutes}:${secs}`;
+
+        if (seconds <= 600) document.getElementById("timer").classList.add("warning"); // Red alert for last 10 mins
         if (seconds <= 0) {
             clearInterval(timer);
             submitTest();
@@ -73,20 +98,47 @@ function startTimer(seconds) {
     }, 1000);
 }
 
-// Submit & Calculate Score
+// Submit Test & Calculate Score
 function submitTest() {
-    let score = 0;
+    let score = 0, correct = 0, wrong = 0, unattempted = 0;
+
     questions.forEach(q => {
-        if (answers[q.id] == q.correct) score++;
+        if (answers[q.id] !== undefined) {
+            if (answers[q.id] == q.correct) {
+                score++;
+                correct++;
+            } else {
+                wrong++;
+            }
+        } else {
+            unattempted++;
+        }
     });
-    
+
     localStorage.setItem("jeeScore", score);
+    localStorage.setItem("jeeCorrect", correct);
+    localStorage.setItem("jeeWrong", wrong);
+    localStorage.setItem("jeeUnattempted", unattempted);
+    
     window.location.href = "result.html";
 }
 
 // Jump to a Question
 function jumpTo(qid) {
     document.getElementById(`question${qid}`).scrollIntoView({ behavior: "smooth" });
+}
+
+// Update Progress
+function updateProgress() {
+    let completed = Object.keys(answers).length;
+    let progress = Math.round((completed / totalQuestions) * 100);
+    document.getElementById("progress-bar").style.width = `${progress}%`;
+    document.getElementById("progress-text").innerText = `${progress}% Completed`;
+}
+
+// Dark Mode Toggle
+function toggleDarkMode() {
+    document.body.classList.toggle("dark-mode");
 }
 
 document.addEventListener("DOMContentLoaded", loadYearwiseTest);
