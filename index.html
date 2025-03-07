@@ -3,32 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JEE Mock Test</title>
+    <title>JEE Advanced Mock Test</title>
     <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
-    <div class="header">
-        <h1>JEE Advanced Mock Test</h1>
-        <select id="yearSelect" onchange="loadYearwiseTest()">
-            <option value="jee_2023.json">JEE 2023</option>
-            <option value="jee_2022.json">JEE 2022</option>
-            <option value="jee_2021.json">JEE 2021</option>
-        </select>
-        <div id="timer">Time Left: 3:00:00</div>
-    </div>
 
+    <!-- Header Section -->
+    <header class="header">
+        <h1>JEE Mains Mock Test</h1>
+        <div class="header-controls">
+            <label for="yearSelect">Select Year:</label>
+            <select id="yearSelect" onchange="loadYearwiseTest()">
+                <option value="jee_2023.json">JEE 2023</option>
+                <option value="jee_2022.json">JEE 2022</option>
+                <option value="jee_2021.json">JEE 2021</option>
+            </select>
+            <div id="timer" class="timer">Time Left: 3:00:00</div>
+            <button id="toggleDarkMode" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
     <div class="main-container">
-        <div class="sidebar">
-            <h3>Questions</h3>
+        <!-- Sidebar for Question Navigation -->
+        <aside class="sidebar">
+            <h3>Question Navigator</h3>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
             <div id="question-nav"></div>
-        </div>
+        </aside>
 
-        <div class="content">
+        <!-- Main Content Area -->
+        <main class="content">
             <div id="questions"></div>
-            <button onclick="submitTest()">Submit Test</button>
-        </div>
+        </main>
+
+        <!-- Floating Submit Button -->
+        <button class="submit-btn" onclick="submitTest()">Submit Test</button>
     </div>
 
-    <script src="script.js"></script>
 </body>
 </html>
