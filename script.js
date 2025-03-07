@@ -15,11 +15,11 @@ function loadYearwiseTest() {
         .then(data => {
             questions = [...data.physics, ...data.chemistry, ...data.math];
             totalQuestions = questions.length;
-            if (questions.length > 0) {
+            if (totalQuestions > 0) {
                 displayQuestion(0);
+                updateNavButtons();
                 updateProgress();
                 startTimer();
-                updateNavButtons();
             } else {
                 console.error("No questions found in the selected file.");
             }
@@ -29,6 +29,8 @@ function loadYearwiseTest() {
 
 // Display One Question at a Time
 function displayQuestion(index) {
+    if (index < 0 || index >= totalQuestions) return;
+    
     let questionContainer = document.getElementById("question-content");
     let q = questions[index];
 
@@ -40,7 +42,8 @@ function displayQuestion(index) {
         ? q.options.map((opt, i) => 
             `<label><input type="radio" name="q${q.id}" value="${i}" ${answers[q.id] == i ? "checked" : ""} 
             onchange="saveAnswer(${q.id}, ${i})"> ${opt}</label><br>`).join("")
-        : `<input type="number" id="q${q.id}" value="${answers[q.id] || ""}" oninput="saveAnswer(${q.id}, this.value)">`;
+        : `<input type="number" id="q${q.id}" value="${answers[q.id] || ""}" 
+            oninput="saveAnswer(${q.id}, this.value)">`;
 
     questionContainer.innerHTML = `
         <div class="question">
@@ -55,6 +58,7 @@ function displayQuestion(index) {
 
     currentQuestionIndex = index;
     highlightNavButton(index);
+    smoothScrollTo("question-content");
 }
 
 // Save Answer & Auto-Navigate
@@ -62,18 +66,19 @@ function saveAnswer(qid, ans) {
     answers[qid] = ans;
     localStorage.setItem("jeeAnswers", JSON.stringify(answers));
     updateProgress();
+    updateNavButtons();
 }
 
 // Navigate Between Questions
 function nextQuestion() {
     if (currentQuestionIndex < totalQuestions - 1) {
-        displayQuestion(++currentQuestionIndex);
+        displayQuestion(currentQuestionIndex + 1);
     }
 }
 
 function prevQuestion() {
     if (currentQuestionIndex > 0) {
-        displayQuestion(--currentQuestionIndex);
+        displayQuestion(currentQuestionIndex - 1);
     }
 }
 
@@ -111,23 +116,25 @@ function markForReview(qid) {
 function startTimer() {
     clearInterval(timer);
 
+    function updateTimerDisplay() {
+        let hours = Math.floor(timeLeft / 3600);
+        let minutes = Math.floor((timeLeft % 3600) / 60);
+        let secs = timeLeft % 60;
+        document.getElementById("timer").innerText = `⏳ Time Left: ${hours}:${minutes}:${secs}`;
+        document.getElementById("timer").classList.toggle("warning", timeLeft <= 600);
+    }
+
+    updateTimerDisplay();
+
     timer = setInterval(() => {
         if (timeLeft <= 0) {
             clearInterval(timer);
             submitTest();
-            return;
+        } else {
+            timeLeft--;
+            localStorage.setItem("jeeTimeLeft", timeLeft);
+            updateTimerDisplay();
         }
-
-        let hours = Math.floor(timeLeft / 3600);
-        let minutes = Math.floor((timeLeft % 3600) / 60);
-        let secs = timeLeft % 60;
-
-        document.getElementById("timer").innerText = `⏳ Time Left: ${hours}:${minutes}:${secs}`;
-        localStorage.setItem("jeeTimeLeft", timeLeft);
-
-        if (timeLeft <= 600) document.getElementById("timer").classList.add("warning"); // Red alert for last 10 mins
-
-        timeLeft--;
     }, 1000);
 }
 
@@ -138,17 +145,11 @@ function submitTest() {
     questions.forEach(q => {
         if (answers[q.id] !== undefined) {
             if (q.type === "mcq") {
-                if (parseInt(answers[q.id]) === q.correct) {
-                    correct++;
-                } else {
-                    wrong++;
-                }
+                correct += parseInt(answers[q.id]) === q.correct ? 1 : 0;
+                wrong += parseInt(answers[q.id]) !== q.correct ? 1 : 0;
             } else if (q.type === "numerical") {
-                if (parseFloat(answers[q.id]) === parseFloat(q.correct)) {
-                    correct++;
-                } else {
-                    wrong++;
-                }
+                correct += parseFloat(answers[q.id]) === parseFloat(q.correct) ? 1 : 0;
+                wrong += parseFloat(answers[q.id]) !== parseFloat(q.correct) ? 1 : 0;
             }
         } else {
             unattempted++;
@@ -161,7 +162,7 @@ function submitTest() {
     localStorage.setItem("jeeCorrect", correct);
     localStorage.setItem("jeeWrong", wrong);
     localStorage.setItem("jeeUnattempted", unattempted);
-    localStorage.setItem("jeeReviewAnswers", JSON.stringify(answers)); // Store for review
+    localStorage.setItem("jeeReviewAnswers", JSON.stringify(answers));
 
     window.location.href = "result.html";
 }
@@ -200,19 +201,18 @@ function loadReviewAnswers() {
     let reviewContainer = document.getElementById("review-questions");
     let storedAnswers = JSON.parse(localStorage.getItem("jeeReviewAnswers")) || {};
 
-    reviewContainer.innerHTML = questions.map((q, index) => {
-        let correctAnswer = q.type === "mcq" ? q.options[q.correct] : q.correct;
-        let userAnswer = storedAnswers[q.id] !== undefined
-            ? (q.type === "mcq" ? q.options[storedAnswers[q.id]] : storedAnswers[q.id])
-            : "Not Answered";
+    reviewContainer.innerHTML = questions.map((q, index) => `
+        <div class="question">
+            <p><b>Q${index + 1}:</b> ${q.question}</p>
+            <p><b>Your Answer:</b> ${storedAnswers[q.id] || "Not Answered"}</p>
+            <p><b>Correct Answer:</b> ${q.type === "mcq" ? q.options[q.correct] : q.correct}</p>
+            <hr>
+        </div>`).join("");
+}
 
-        return `<div class="question">
-                    <p><b>Q${index + 1}:</b> ${q.question}</p>
-                    <p><b>Your Answer:</b> ${userAnswer}</p>
-                    <p><b>Correct Answer:</b> ${correctAnswer}</p>
-                    <hr>
-                </div>`;
-    }).join("");
+// Smooth Scrolling to Element
+function smoothScrollTo(id) {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 }
 
 // Initialize App
