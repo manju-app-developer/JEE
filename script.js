@@ -6,24 +6,31 @@ let totalQuestions = 75;
 let timeLeft = 3 * 60 * 60; // 3 hours in seconds
 let timer;
 
-// Load Questions Based on Year Selection
+// 📌 Load Questions Based on Year Selection
 function loadYearwiseTest() {
     let yearFile = document.getElementById("yearSelect").value;
 
     fetch(`data/${yearFile}`)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) throw new Error(`Failed to load: ${yearFile}`);
+            return response.json();
+        })
         .then(data => {
-            questions = [...data.physics, ...data.chemistry, ...data.math];
+            questions = [...(data.physics || []), ...(data.chemistry || []), ...(data.math || [])];
             totalQuestions = questions.length;
+            if (totalQuestions === 0) throw new Error("No questions found!");
             displayQuestion(0);
             updateProgress();
             startTimer(timeLeft);
             updateNavButtons();
         })
-        .catch(error => console.error("Error loading questions:", error));
+        .catch(error => {
+            console.error("Error loading questions:", error);
+            document.getElementById("question-content").innerHTML = `<p class="error">⚠️ Error loading questions: ${error.message}</p>`;
+        });
 }
 
-// Display One Question at a Time
+// 📌 Display a Question
 function displayQuestion(index) {
     let questionContainer = document.getElementById("question-content");
     let q = questions[index];
@@ -36,7 +43,8 @@ function displayQuestion(index) {
         ? q.options.map((opt, i) => 
             `<label><input type="radio" name="q${q.id}" value="${i}" ${answers[q.id] == i ? "checked" : ""} 
             onchange="saveAnswer(${q.id}, ${i})"> ${opt}</label><br>`).join("")
-        : `<input type="number" id="q${q.id}" value="${answers[q.id] || ""}" oninput="saveAnswer(${q.id}, this.value)">`;
+        : `<input type="number" id="q${q.id}" value="${answers[q.id] || ""}" 
+            oninput="saveAnswer(${q.id}, this.value)">`;
 
     questionContainer.innerHTML = `
         <div class="question">
@@ -53,14 +61,14 @@ function displayQuestion(index) {
     highlightNavButton(index);
 }
 
-// Save Answer & Auto-Navigate
+// 📌 Save Answer
 function saveAnswer(qid, ans) {
     answers[qid] = ans;
     localStorage.setItem("jeeAnswers", JSON.stringify(answers));
     updateProgress();
 }
 
-// Navigate Between Questions
+// 📌 Navigation Functions
 function nextQuestion() {
     if (currentQuestionIndex < totalQuestions - 1) {
         displayQuestion(++currentQuestionIndex);
@@ -73,7 +81,7 @@ function prevQuestion() {
     }
 }
 
-// Update Question Navigator
+// 📌 Update Question Navigator
 function updateNavButtons() {
     let navContainer = document.getElementById("question-nav");
     navContainer.innerHTML = "";
@@ -89,21 +97,21 @@ function updateNavButtons() {
     });
 }
 
-// Highlight the Current Question Button
+// 📌 Highlight Current Question Button
 function highlightNavButton(index) {
     document.querySelectorAll(".nav-btn").forEach((btn, i) => {
         btn.classList.toggle("current-question", i === index);
     });
 }
 
-// Mark for Review
+// 📌 Mark Question for Review
 function markForReview(qid) {
     markedForReview[qid] = !markedForReview[qid];
     localStorage.setItem("jeeReview", JSON.stringify(markedForReview));
     updateNavButtons();
 }
 
-// Timer Function with Auto-Submit
+// 📌 Start Timer with Auto-Submit
 function startTimer(seconds) {
     clearInterval(timer);
     timer = setInterval(() => {
@@ -122,7 +130,7 @@ function startTimer(seconds) {
     }, 1000);
 }
 
-// Submit Test & Calculate Score
+// 📌 Submit Test & Calculate Score
 function submitTest() {
     let correct = 0, wrong = 0, unattempted = 0;
 
@@ -157,7 +165,7 @@ function submitTest() {
     window.location.href = "result.html";
 }
 
-// Update Progress Bar
+// 📌 Update Progress Bar
 function updateProgress() {
     let completed = Object.keys(answers).length;
     let progress = Math.round((completed / totalQuestions) * 100);
@@ -165,12 +173,12 @@ function updateProgress() {
     document.getElementById("progress-text").innerText = `${progress}% Completed`;
 }
 
-// Toggle Dark Mode
+// 📌 Toggle Dark Mode
 function toggleDarkMode() {
     document.body.classList.toggle("dark-mode");
 }
 
-// Reset Test & Restart
+// 📌 Reset Test
 function resetTest() {
     if (confirm("Are you sure you want to reset the test? All answers will be lost!")) {
         localStorage.clear();
@@ -178,7 +186,7 @@ function resetTest() {
     }
 }
 
-// Review Answers Feature (On Result Page)
+// 📌 Review Answers (On Result Page)
 function loadReviewAnswers() {
     let reviewContainer = document.getElementById("review-questions");
     let storedAnswers = JSON.parse(localStorage.getItem("jeeReviewAnswers")) || {};
@@ -202,9 +210,9 @@ function loadReviewAnswers() {
     });
 }
 
-// Load review page when review.html is opened
+// 📌 Load Review Page
 if (window.location.pathname.includes("review.html")) {
     loadReviewAnswers();
 } else {
     document.addEventListener("DOMContentLoaded", loadYearwiseTest);
-}
+    }
