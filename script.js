@@ -9,12 +9,13 @@ let timer;
 // Load Questions Based on Year Selection
 function loadYearwiseTest() {
     let yearFile = document.getElementById("yearSelect").value;
-    
+
     fetch(`data/${yearFile}`)
         .then(response => response.json())
         .then(data => {
             questions = [...data.physics, ...data.chemistry, ...data.math];
             totalQuestions = questions.length;
+
             if (totalQuestions > 0) {
                 displayQuestion(0);
                 updateNavButtons();
@@ -22,6 +23,7 @@ function loadYearwiseTest() {
                 startTimer();
             } else {
                 console.error("No questions found in the selected file.");
+                document.getElementById("question-content").innerHTML = "<p>No questions available for this year.</p>";
             }
         })
         .catch(error => console.error("Error loading questions:", error));
@@ -29,17 +31,15 @@ function loadYearwiseTest() {
 
 // Display One Question at a Time
 function displayQuestion(index) {
-    if (index < 0 || index >= totalQuestions) return;
-    
+    if (index < 0 || index >= totalQuestions || !questions[index]) return;
+
     let questionContainer = document.getElementById("question-content");
     let q = questions[index];
 
-    if (!q) return;
-
     let imageHTML = q.image ? `<img src="${q.image}" class="question-image" alt="Question Image">` : "";
-    
+
     let optionsHTML = q.type === "mcq"
-        ? q.options.map((opt, i) => 
+        ? q.options.map((opt, i) =>
             `<label><input type="radio" name="q${q.id}" value="${i}" ${answers[q.id] == i ? "checked" : ""} 
             onchange="saveAnswer(${q.id}, ${i})"> ${opt}</label><br>`).join("")
         : `<input type="number" id="q${q.id}" value="${answers[q.id] || ""}" 
@@ -117,9 +117,9 @@ function startTimer() {
     clearInterval(timer);
 
     function updateTimerDisplay() {
-        let hours = Math.floor(timeLeft / 3600);
-        let minutes = Math.floor((timeLeft % 3600) / 60);
-        let secs = timeLeft % 60;
+        let hours = String(Math.floor(timeLeft / 3600)).padStart(2, '0');
+        let minutes = String(Math.floor((timeLeft % 3600) / 60)).padStart(2, '0');
+        let secs = String(timeLeft % 60).padStart(2, '0');
         document.getElementById("timer").innerText = `⏳ Time Left: ${hours}:${minutes}:${secs}`;
         document.getElementById("timer").classList.toggle("warning", timeLeft <= 600);
     }
