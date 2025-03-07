@@ -1,5 +1,6 @@
 let questions = [];
 let answers = {};
+let markedForReview = {};
 let timer;
 
 // Load Questions Based on Year Selection
@@ -35,6 +36,7 @@ function displayQuestions() {
                 <p><b>Q${index + 1}:</b> ${q.question}</p>
                 ${imageHTML}
                 ${optionsHTML}
+                <button onclick="markForReview(${q.id})">Mark for Review</button>
             </div>
         `;
 
@@ -46,6 +48,12 @@ function displayQuestions() {
 function saveAnswer(qid, ans) {
     answers[qid] = ans;
     document.getElementById(`nav${qid}`).style.background = "#28a745";
+}
+
+// Mark for Review
+function markForReview(qid) {
+    markedForReview[qid] = !markedForReview[qid]; 
+    document.getElementById(`nav${qid}`).style.background = markedForReview[qid] ? "#ffc107" : "";
 }
 
 // Timer Function
