@@ -11,8 +11,15 @@ function loadYearwiseTest() {
     let yearFile = document.getElementById("yearSelect").value;
 
     fetch(`data/${yearFile}`)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) throw new Error("Failed to load questions");
+            return response.json();
+        })
         .then(data => {
+            if (!data.physics || !data.chemistry || !data.math) {
+                throw new Error("Invalid question format in JSON file.");
+            }
+
             questions = [...data.physics, ...data.chemistry, ...data.math];
             totalQuestions = questions.length;
 
@@ -22,11 +29,13 @@ function loadYearwiseTest() {
                 updateProgress();
                 startTimer();
             } else {
-                console.error("No questions found in the selected file.");
                 document.getElementById("question-content").innerHTML = "<p>No questions available for this year.</p>";
             }
         })
-        .catch(error => console.error("Error loading questions:", error));
+        .catch(error => {
+            console.error("Error loading questions:", error);
+            document.getElementById("question-content").innerHTML = "<p>Error loading questions. Please try again.</p>";
+        });
 }
 
 // Display One Question at a Time
@@ -38,12 +47,17 @@ function displayQuestion(index) {
 
     let imageHTML = q.image ? `<img src="${q.image}" class="question-image" alt="Question Image">` : "";
 
-    let optionsHTML = q.type === "mcq"
-        ? q.options.map((opt, i) =>
-            `<label><input type="radio" name="q${q.id}" value="${i}" ${answers[q.id] == i ? "checked" : ""} 
-            onchange="saveAnswer(${q.id}, ${i})"> ${opt}</label><br>`).join("")
-        : `<input type="number" id="q${q.id}" value="${answers[q.id] || ""}" 
-            oninput="saveAnswer(${q.id}, this.value)">`;
+    let optionsHTML = "";
+    if (q.type === "mcq") {
+        optionsHTML = q.options.map((opt, i) =>
+            `<label>
+                <input type="radio" name="q${q.id}" value="${i}" ${answers[q.id] == i ? "checked" : ""} 
+                onchange="saveAnswer(${q.id}, ${i})"> ${opt}
+            </label><br>`).join("");
+    } else if (q.type === "numerical") {
+        optionsHTML = `<input type="number" id="q${q.id}" value="${answers[q.id] || ""}" 
+                       oninput="saveAnswer(${q.id}, this.value)">`;
+    }
 
     questionContainer.innerHTML = `
         <div class="question">
@@ -194,25 +208,6 @@ function resetTest() {
         localStorage.clear();
         location.reload();
     }
-}
-
-// Review Answers Feature (On Result Page)
-function loadReviewAnswers() {
-    let reviewContainer = document.getElementById("review-questions");
-    let storedAnswers = JSON.parse(localStorage.getItem("jeeReviewAnswers")) || {};
-
-    reviewContainer.innerHTML = questions.map((q, index) => `
-        <div class="question">
-            <p><b>Q${index + 1}:</b> ${q.question}</p>
-            <p><b>Your Answer:</b> ${storedAnswers[q.id] || "Not Answered"}</p>
-            <p><b>Correct Answer:</b> ${q.type === "mcq" ? q.options[q.correct] : q.correct}</p>
-            <hr>
-        </div>`).join("");
-}
-
-// Smooth Scrolling to Element
-function smoothScrollTo(id) {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 }
 
 // Initialize App
