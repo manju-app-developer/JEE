@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JEE Test Result</title>
+    <title>JEE Mock Test Result</title>
     <link rel="stylesheet" href="style.css">
     <script src="result.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -13,11 +13,12 @@
         /* 🌍 Global Styles */
         body {
             font-family: 'Poppins', sans-serif;
-            background: #f4f4f4;
+            background: linear-gradient(135deg, #f4f4f4, #e3e3e3);
             margin: 0;
             padding: 0;
             color: #333;
             text-align: center;
+            transition: all 0.3s ease-in-out;
         }
 
         /* 🔥 Header */
@@ -25,25 +26,29 @@
             background: #007bff;
             color: white;
             padding: 20px;
-            font-size: 24px;
+            font-size: 26px;
             font-weight: bold;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-in-out;
         }
 
         /* 📊 Result Container */
         .result-container {
-            width: 80%;
-            margin: 20px auto;
+            width: 85%;
+            margin: 30px auto;
             background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            animation: slideUp 1s ease-in-out;
         }
 
         /* 🎯 Performance Breakdown */
         .performance p {
             font-size: 18px;
             font-weight: bold;
+            opacity: 0;
+            animation: fadeInUp 1s ease-in-out forwards;
         }
 
         .correct { color: #28a745; }
@@ -52,43 +57,44 @@
 
         /* 🏆 Rank Box */
         .rank-box {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: bold;
             background: #ffc107;
             color: black;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px auto;
+            padding: 18px;
+            border-radius: 10px;
+            margin: 25px auto;
             width: 60%;
+            animation: bounceIn 1s ease-in-out;
         }
 
         /* 📈 Performance Chart */
         .chart-container {
-            width: 60%;
+            width: 70%;
             margin: auto;
         }
 
         /* 🎮 Buttons */
         .buttons {
-            margin-top: 20px;
+            margin-top: 30px;
         }
 
         .btn {
             display: inline-block;
-            margin: 15px;
-            padding: 12px 18px;
+            margin: 12px;
+            padding: 15px 22px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 18px;
             cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
+            transition: all 0.3s ease-in-out;
         }
 
         .retry { background: #007bff; color: white; }
-        .retry:hover { background: #0056b3; transform: scale(1.05); }
+        .retry:hover { background: #0056b3; transform: scale(1.08); }
 
         .review { background: #28a745; color: white; }
-        .review:hover { background: #1e7e34; transform: scale(1.05); }
+        .review:hover { background: #1e7e34; transform: scale(1.08); }
 
         /* 🎉 Confetti Effect */
         canvas#confetti-canvas {
@@ -99,6 +105,12 @@
             height: 100%;
             pointer-events: none;
         }
+
+        /* 🎬 Animations */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounceIn { 0% { transform: scale(0.8); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
@@ -138,6 +150,66 @@
 
     <!-- Confetti Effect -->
     <canvas id="confetti-canvas"></canvas>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // 🎯 Dummy Score Data (Replace with real values)
+            let score = localStorage.getItem("jeeScore") || 0;
+            let correct = localStorage.getItem("jeeCorrect") || 0;
+            let wrong = localStorage.getItem("jeeWrong") || 0;
+            let unattempted = localStorage.getItem("jeeUnattempted") || 0;
+
+            // 🎯 Update Score Display with Animation
+            let scoreElement = document.getElementById("score");
+            let rankElement = document.getElementById("rank");
+
+            let currentScore = 0;
+            let interval = setInterval(() => {
+                if (currentScore >= score) {
+                    clearInterval(interval);
+                } else {
+                    currentScore++;
+                    scoreElement.innerText = currentScore;
+                }
+            }, 10);
+
+            // 📊 Set Correct, Wrong, and Unattempted Values
+            document.getElementById("correct").innerText = correct;
+            document.getElementById("wrong").innerText = wrong;
+            document.getElementById("unattempted").innerText = unattempted;
+
+            // 🏆 Rank Estimation Logic
+            let rank = 100000 - (score * 300);
+            rankElement.innerText = rank > 0 ? rank : "Top 100!";
+
+            // 🎉 Confetti Celebration
+            if (score > 200) {
+                setTimeout(() => {
+                    let confettiCanvas = document.getElementById("confetti-canvas");
+                    let confettiInstance = confetti.create(confettiCanvas, { resize: true });
+                    confettiInstance({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
+                }, 500);
+            }
+
+            // 📈 Performance Chart
+            new Chart(document.getElementById("performanceChart"), {
+                type: "doughnut",
+                data: {
+                    labels: ["Correct", "Wrong", "Unattempted"],
+                    datasets: [{
+                        data: [correct, wrong, unattempted],
+                        backgroundColor: ["#28a745", "#dc3545", "#6c757d"]
+                    }]
+                }
+            });
+        });
+
+        // 🔄 Reset Test Function
+        function resetTest() {
+            localStorage.clear();
+            window.location.href = "index.html";
+        }
+    </script>
 
 </body>
 </html>
