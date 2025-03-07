@@ -1,6 +1,6 @@
 {
   "Physics": {
-    "MCQ": [
+    "mcq": [
       {
         "id": 1,
         "question": "A particle moves along the x-axis according to the equation x(t) = 5t² - 3t + 2. What is the acceleration of the particle?",
@@ -122,7 +122,7 @@
         "correct": 0
       }
     ],
-    "Integer": [
+    "integer": [
       {
         "id": 21,
         "question": "A car accelerates uniformly from rest to a speed of 20 m/s in 10 seconds. What is the acceleration of the car in m/s²?",
@@ -151,7 +151,7 @@
     ]
   },
   "Mathematics": {
-    "MCQ": [
+    "mcq": [
       {
         "id": 1,
         "question": "If the sum of the roots of the quadratic equation ax² + bx + c = 0 is equal to the product of the roots, then what is the value of b/c?",
@@ -273,7 +273,7 @@
         "correct": 0
       }
     ],
-    "Integer": [
+    "integer": [
       {
         "id": 21,
         "question": "Find the sum of all natural numbers from 1 to 50.",
@@ -302,7 +302,7 @@
     ]
   },
   "Chemistry": {
-    "MCQ": [
+    "mcq": [
       {
         "id": 1,
         "question": "Which of the following has the highest ionization energy?",
@@ -424,7 +424,7 @@
         "correct": 2
       }
     ],
-    "Integer": [
+    "integer": [
       {
         "id": 21,
         "question": "How many moles of oxygen atoms are present in one mole of H2SO4?",
