@@ -14,6 +14,13 @@
             padding: 0;
             color: #333;
             text-align: center;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* 🔥 Dark Mode Support */
+        body.dark-mode {
+            background: #181818;
+            color: white;
         }
 
         /* 📌 Header */
@@ -21,62 +28,83 @@
             background: #007bff;
             color: white;
             padding: 15px;
-            text-align: center;
             font-size: 24px;
             font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         /* 📖 Question Review Container */
         .review-container {
-            width: 80%;
+            width: 90%;
+            max-width: 800px;
             margin: 20px auto;
             background: white;
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.6s ease-in-out forwards;
         }
 
+        /* 🎨 Answer Styles */
         .question {
             padding: 15px;
             border-bottom: 1px solid #ddd;
-            text-align: left;
         }
 
-        .correct {
-            color: #28a745;
-            font-weight: bold;
-        }
+        .correct { color: #28a745; font-weight: bold; }
+        .wrong { color: #dc3545; font-weight: bold; }
+        .unattempted { color: #6c757d; font-weight: bold; }
 
-        .wrong {
-            color: #dc3545;
-            font-weight: bold;
-        }
-
-        .unattempted {
-            color: #6c757d;
-            font-weight: bold;
-        }
-
-        /* 🏆 Buttons */
+        /* 🏆 Navigation Buttons */
         .btn {
             display: inline-block;
             margin: 20px;
             padding: 12px 20px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 18px;
             cursor: pointer;
             transition: background 0.3s, transform 0.2s;
         }
 
-        .btn-home {
-            background: #007bff;
-            color: white;
+        .btn-home { background: #007bff; color: white; }
+        .btn-home:hover { background: #0056b3; transform: scale(1.05); }
+
+        /* 🔥 Smart Navigation Bar */
+        .question-nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
         }
 
-        .btn-home:hover {
-            background: #0056b3;
-            transform: scale(1.05);
+        .question-nav button {
+            margin: 5px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            background: #ddd;
+        }
+
+        .question-nav button:hover {
+            background: #007bff;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* 🔥 Animation */
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -87,10 +115,11 @@
         📊 Review Your Answers
     </div>
 
+    <!-- Smart Question Navigator -->
+    <div class="question-nav" id="question-nav"></div>
+
     <!-- Question Review Section -->
-    <div class="review-container">
-        <div id="review-questions"></div>
-    </div>
+    <div class="review-container" id="review-questions"></div>
 
     <!-- Back Button -->
     <button class="btn btn-home" onclick="window.location.href='index.html'">🏠 Go Back to Home</button>
@@ -100,10 +129,12 @@
 
         function loadReviewAnswers() {
             let reviewContainer = document.getElementById("review-questions");
+            let navContainer = document.getElementById("question-nav");
             let questions = JSON.parse(localStorage.getItem("jeeQuestions")) || [];
-            let storedAnswers = JSON.parse(localStorage.getItem("jeeReviewAnswers")) || {};
+            let storedAnswers = JSON.parse(localStorage.getItem("jeeAnswers")) || {};
 
             reviewContainer.innerHTML = "";
+            navContainer.innerHTML = "";
 
             questions.forEach((q, index) => {
                 let correctAnswer = q.type === "mcq" ? q.options[q.correct] : q.correct;
@@ -116,13 +147,26 @@
                 else if (userAnswer === correctAnswer) answerClass = "correct";
                 else answerClass = "wrong";
 
-                reviewContainer.innerHTML += `
-                    <div class="question">
+                let questionBlock = `
+                    <div class="question" id="question${q.id}">
                         <p><b>Q${index + 1}:</b> ${q.question}</p>
                         <p><b>Your Answer:</b> <span class="${answerClass}">${userAnswer}</span></p>
                         <p><b>Correct Answer:</b> <span class="correct">${correctAnswer}</span></p>
                     </div>
                 `;
+
+                reviewContainer.innerHTML += questionBlock;
+
+                // Add question numbers to navigator
+                let navButton = document.createElement("button");
+                navButton.innerText = index + 1;
+                navButton.onclick = () => document.getElementById(`question${q.id}`).scrollIntoView({ behavior: "smooth" });
+                
+                if (answerClass === "correct") navButton.style.background = "#28a745";
+                else if (answerClass === "wrong") navButton.style.background = "#dc3545";
+                else navButton.style.background = "#6c757d";
+
+                navContainer.appendChild(navButton);
             });
         }
     </script>
