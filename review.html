@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Your Answers</title>
+
+    <style>
+        /* 🌍 Global Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            text-align: center;
+        }
+
+        /* 📌 Header */
+        .header {
+            background: #007bff;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* 📖 Question Review Container */
+        .review-container {
+            width: 80%;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .question {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .correct {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .wrong {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .unattempted {
+            color: #6c757d;
+            font-weight: bold;
+        }
+
+        /* 🏆 Buttons */
+        .btn {
+            display: inline-block;
+            margin: 20px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .btn-home {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-home:hover {
+            background: #0056b3;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        📊 Review Your Answers
+    </div>
+
+    <!-- Question Review Section -->
+    <div class="review-container">
+        <div id="review-questions"></div>
+    </div>
+
+    <!-- Back Button -->
+    <button class="btn btn-home" onclick="window.location.href='index.html'">🏠 Go Back to Home</button>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", loadReviewAnswers);
+
+        function loadReviewAnswers() {
+            let reviewContainer = document.getElementById("review-questions");
+            let questions = JSON.parse(localStorage.getItem("jeeQuestions")) || [];
+            let storedAnswers = JSON.parse(localStorage.getItem("jeeReviewAnswers")) || {};
+
+            reviewContainer.innerHTML = "";
+
+            questions.forEach((q, index) => {
+                let correctAnswer = q.type === "mcq" ? q.options[q.correct] : q.correct;
+                let userAnswer = storedAnswers[q.id] !== undefined
+                    ? (q.type === "mcq" ? q.options[storedAnswers[q.id]] : storedAnswers[q.id])
+                    : "Not Answered";
+
+                let answerClass = "unattempted";
+                if (userAnswer === "Not Answered") answerClass = "unattempted";
+                else if (userAnswer === correctAnswer) answerClass = "correct";
+                else answerClass = "wrong";
+
+                reviewContainer.innerHTML += `
+                    <div class="question">
+                        <p><b>Q${index + 1}:</b> ${q.question}</p>
+                        <p><b>Your Answer:</b> <span class="${answerClass}">${userAnswer}</span></p>
+                        <p><b>Correct Answer:</b> <span class="correct">${correctAnswer}</span></p>
+                    </div>
+                `;
+            });
+        }
+    </script>
+
+</body>
+</html>
